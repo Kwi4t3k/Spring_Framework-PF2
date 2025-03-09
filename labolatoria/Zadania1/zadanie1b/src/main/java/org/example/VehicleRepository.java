@@ -41,31 +41,15 @@ public class VehicleRepository implements IVehicleRepository {
 
     @Override
     public List<Vehicle> getVehicles() {
-        return vehicles;
-    }
-
-    public boolean ifIdExistsInFile(String id) { // gówno nie działa
-        try (BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                String[] parts = line.split(";");
-                if (parts[4].equals(id)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-        return false;
+        return List.copyOf(vehicles);
     }
 
     @Override
     public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathToFile))) {
             for (Vehicle vehicle : vehicles) {
-                if (!ifIdExistsInFile(vehicle.id)) { //  to też gówno nie działa
-                    writer.write(vehicle.toCSV());
-                    writer.newLine();
-                }
+                writer.write(vehicle.toCSV());
+                writer.newLine();
             }
         } catch (IOException e) {
             System.err.println("Plik sie nie zapisal " + e.getMessage());
