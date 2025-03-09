@@ -6,7 +6,7 @@ import java.util.List;
 
 public class VehicleRepository implements IVehicleRepository {
     private final List<Vehicle> vehicles;
-    private String pathToFile = "src/main/resources/vehicles.txt";
+    private final String pathToFile = "src/main/resources/vehicles.txt";
 
     public VehicleRepository() {
         this.vehicles = new ArrayList<>();
@@ -41,31 +41,15 @@ public class VehicleRepository implements IVehicleRepository {
 
     @Override
     public List<Vehicle> getVehicles() {
-        return vehicles;
+        return List.copyOf(vehicles);
     }
-
-//    public boolean ifIdExistsInFile(String id) { // gówno nie działa
-//        try (BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
-//            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-//                String[] parts = line.split(";");
-//                if (parts[4].equals(id)) {
-//                    return true;
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.err.println(e.getMessage());
-//        }
-//        return false;
-//    }
 
     @Override
     public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathToFile))) {
             for (Vehicle vehicle : vehicles) {
-//                if (!ifIdExistsInFile(vehicle.id)) { //  to też gówno nie działa
-                    writer.write(vehicle.toCSV());
-                    writer.newLine();
-//                }
+                writer.write(vehicle.toCSV());
+                writer.newLine();
             }
         } catch (IOException e) {
             System.err.println("Plik sie nie zapisal " + e.getMessage());
@@ -120,17 +104,45 @@ public class VehicleRepository implements IVehicleRepository {
         }
     }
 
-    @Override
-    public void addVehicle(Vehicle vehicle) {
-        vehicles.add(vehicle);
-        save();
-        System.out.printf("Dodano pojazd: %s\n", vehicle);
+    public boolean ifIdExistsInFile(String id) {
+        File file = new File(pathToFile);
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(";");
+                    if (parts.length >= 5 && parts[4].equals(id)) {
+                        return true;
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        } else {
+            return false;
+        }
+        return false;
     }
 
     @Override
-    public void removeVehicle(String vehicleId) {
-        vehicles.remove(vehicleId);
+    public void addVehicle(Vehicle vehicle) {
+        if (ifIdExistsInFile(vehicle.id)) {
+            System.out.println("Pojazd o id: " + vehicle.id + " istnieje w pliku");
+            return;
+        }
+
+        vehicles.add(vehicle);
         save();
-        System.out.printf("Usunięto pojazd: %s\n", vehicleId);
+        System.out.println("Dodano pojazd: " + vehicle);
+    }
+
+    @Override
+    public void removeVehicle(String id) {
+        if (vehicles.removeIf(vehicle -> vehicle.id.equals(id))) {
+            save();
+            System.out.println("Usunięto pojazd o id: " + id);
+        } else {
+            System.out.println("Nie usunięto pojazdu o id: " + id);
+        }
     }
 }
