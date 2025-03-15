@@ -22,7 +22,7 @@ public class Main {
             if (wybor == 1) {
                 boolean ok = false;
                 for (Vehicle vehicle : vehicleRepository.getVehicles()) {
-                    if (!vehicle.rented) {
+                    if (!vehicle.isRented()) {
                         System.out.println(vehicle);
                         ok = true;
                     }
@@ -33,7 +33,7 @@ public class Main {
             } else if (wybor == 2) {
                 boolean ok = false;
                 for (Vehicle vehicle : vehicleRepository.getVehicles()) {
-                    if (vehicle.rented) {
+                    if (vehicle.isRented()) {
                         System.out.println(vehicle);
                         ok = true;
                     }

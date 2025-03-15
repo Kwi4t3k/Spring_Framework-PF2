@@ -8,6 +8,6 @@ public interface IVehicleRepository {
     List<Vehicle> getVehicles();
     void save();
     void load();
-    void addVehicle(Vehicle vehicle);
-    void removeVehicle(String id);
+
+    void addVehicle(Vehicle vehicle); // dodatkowe do testów
 }

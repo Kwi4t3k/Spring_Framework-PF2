@@ -3,11 +3,11 @@ package org.example;
 import java.util.Objects;
 
 public abstract class Vehicle {
-    protected String brand, model;
-    protected int year;
-    protected float price;
-    protected boolean rented;
-    protected String id;
+    private final String brand, model;
+    private final int year;
+    private final float price;
+    private boolean rented;
+    private final String id;
 
     public Vehicle(String brand, String model, int year, float price, String id) {
         this.brand = brand;
@@ -18,11 +18,36 @@ public abstract class Vehicle {
         this.id = id;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public boolean isRented() {
+        return rented;
+    }
+
     public String getId() {
         return id;
     }
 
+    protected void setRented(boolean rented) {
+        this.rented = rented;
+    }
+
     public abstract String toCSV();
+    public abstract Vehicle clone();
 
     @Override
     public String toString() {

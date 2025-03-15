@@ -1,0 +1,17 @@
+Zadania2 cz.1 (jeżeli ktoś skończył zadanie1 i 1cd - zadanie2 będzie realizowane na następnych ćwiczeniach)
+Kolejna część, będzie zadana po kolejnym wykładzie( maven+github)
+
+Zakładamy, że nasza aplikacja działa przez sieć(nie implementujemy tego – aplikacja działa tak jak
+poprzednio bez podziału na aplikacje klient/serwer) .
+User może się zalogować wypożyczyć i zwrócić pojazd.
+Dodatkowo admin może dodać i usunąć pojazd przeglądać listę pojazdów.
+Admin może też wyświetlić listę userów wraz z danymi o pojeździe, który wypożyczyli.
+User może wyświetlić swoje dane wraz z danymi pojazdu, który wypożyczył.
+Plik csv podobnie jak w przypadku pliku z pojazdami stwórz samodzielnie.
+Do intefejsu IVehicleRepository dodaj 2 funkcje addVehicle i removeVehicle.
+Zaimplementuj metody w klasie VehicleRepository.
+Dodaj klasę User – posiada pola login, password,role, oraz pole reprezentujące wypożyczony
+samochód. Jakie to powinno być pole?
+Dodaj interfejs IUserRepository z metodą getUser oraz getUsers i save.
+Zaimplementuj te metody w klasie UserRepository.
+Dodaj klasę Authentication – z metodą sprawdzającą czy dane logowania są poprawne.
