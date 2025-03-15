@@ -1,0 +1,58 @@
+Instrukcje
+Napisz program, która umożliwi wypożyczenie pojazdu.
+
+Prosta wersja programu powinna zwierać:
+
+
+
+*abstrakcyjną klasę Vehicle, z polami:
+
+brand,
+
+model,
+
+year,
+
+price,
+
+rented.
+
+Dodatkowo pole, które będzie jednoznacznie odróżniało od siebie pojazdy.
+
+Metodę toCSV zwracającą String z polami w jednym wierszu oddzielone średnikiem.
+
+Metodę toString.
+
+
+
+*Klasy potomne:
+
+Car,
+
+Motorcycle,
+
+Klasa Motorcycle dodatkowo posiada pole kategoria.
+
+
+
+*Interfejs IVehicleRepository:
+
+metody:
+
+rentVehicle
+
+returnVehicle
+
+getVehicles
+
+save  (opcjonalnie load, jeżeli nie mamy wczytywania do listy w konstruktorze)
+
+Należy wymyślić jakie argumenty powinny przyjmować te metody.
+
+*Implementację intefejsu IVehicleRepository.
+
+Z listą pojazdów.
+
+Pojazdy do listy będą wczytywane z pliku oraz zapisywane do pliku po każdej zmianie.
+
+*Klasa, która umożliwi interakcję z użytkownikiem – pozwoli wypożyczyć i zwrócić auto.
