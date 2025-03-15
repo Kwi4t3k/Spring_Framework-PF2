@@ -7,6 +7,11 @@ public class Car extends Vehicle {
 
     @Override
     public String toCSV() {
-        return brand + ";" + model + ";" + year + ";" + price + ";" + id + ";" + rented;
+        return getBrand() + ";" + getModel() + ";" + getYear() + ";" + getPrice() + ";" + getId() + ";" + isRented();
+    }
+
+    @Override
+    public Vehicle clone() {
+        return new Car(getBrand(), getModel(), getYear(), getPrice(), getId());
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class VehicleRepository implements IVehicleRepository {
     private final List<Vehicle> vehicles;
-    private String pathToFile = "src/main/resources/vehicles.txt";
+    private final String pathToFile = "src/main/resources/vehicles.txt";
 
     public VehicleRepository() {
         this.vehicles = new ArrayList<>();
@@ -16,10 +16,10 @@ public class VehicleRepository implements IVehicleRepository {
     @Override
     public void rentVehicle(String id) {
         for (Vehicle vehicle : vehicles) {
-            if (vehicle.id.equals(id) && !vehicle.rented) {
-                System.out.println("Wypożyczony pojazd: " + vehicle);
-                vehicle.rented = true;
+            if (vehicle.getId().equals(id) && !vehicle.isRented()) {
+                vehicle.setRented(true);
                 save();
+                System.out.println("Wypożyczony pojazd: " + vehicle);
                 return;
             }
         }
@@ -29,10 +29,10 @@ public class VehicleRepository implements IVehicleRepository {
     @Override
     public void returnVehicle(String id) {
         for (Vehicle vehicle : vehicles) {
-            if (vehicle.id.equals(id) && vehicle.rented) {
-                System.out.println("Zrwócono pojazd: " + vehicle);
-                vehicle.rented = false;
+            if (vehicle.getId().equals(id) && vehicle.isRented()) {
+                vehicle.setRented(false);
                 save();
+                System.out.println("Zrwócono pojazd: " + vehicle);
                 return;
             }
         }
@@ -41,7 +41,11 @@ public class VehicleRepository implements IVehicleRepository {
 
     @Override
     public List<Vehicle> getVehicles() {
-        return List.copyOf(vehicles);
+        List<Vehicle> clonedVehicles = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            clonedVehicles.add(vehicle.clone());
+        }
+        return List.copyOf(clonedVehicles);
     }
 
     @Override
@@ -59,15 +63,11 @@ public class VehicleRepository implements IVehicleRepository {
     @Override
     public void load() {
         File file = new File(pathToFile);
-        try {
-            if (!file.exists()) {
-                if (file.createNewFile()) {
-                    System.out.println("Plik sie zrobił");
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Plik sie nie zrobił");
+        if (!file.exists()) {
+            return;
         }
+
+        vehicles.clear();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -82,7 +82,7 @@ public class VehicleRepository implements IVehicleRepository {
                     boolean rented = Boolean.parseBoolean(parts[5]);
 
                     Car car = new Car(brand, model, year, price, id);
-                    car.rented = rented;
+                    car.setRented(rented);
                     vehicles.add(car);
                 } else if (parts.length == 7) {
                     String brand = parts[0];
@@ -94,13 +94,47 @@ public class VehicleRepository implements IVehicleRepository {
                     String category = parts[6];
 
                     Motorcycle motorcycle = new Motorcycle(brand, model, year, price, id, category);
-                    motorcycle.rented = rented;
+                    motorcycle.setRented(rented);
                     vehicles.add(motorcycle);
                 }
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Błąd przy odczycie pliku " + e.getMessage());
         }
+    }
+
+    @Override // dodatkowe do testów
+    public void addVehicle(Vehicle vehicle) {
+        for (Vehicle v : vehicles) {
+            if (v.getId().equals(vehicle.getId())) {
+                System.out.println("Pojazd o id: " + vehicle.getId() + " już intnieje w pamięci");
+                return;
+            }
+        }
+
+        if (ifIdExistsInFile(vehicle.getId())) {
+            System.out.println("Pojazd o id: " + vehicle.getId() + " już istnieje w pliku");
+            return;
+        }
+
+        vehicles.add(vehicle);
+        save();
+        System.out.println("Dodano pojazd: " + vehicle);
+    }
+
+    private boolean ifIdExistsInFile(String id) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length >= 5 && parts[4].equals(id)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Błąd przy odczycie pliku " + e.getMessage());
+        }
+        return false;
     }
 }

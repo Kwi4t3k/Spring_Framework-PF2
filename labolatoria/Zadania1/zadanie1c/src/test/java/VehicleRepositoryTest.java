@@ -24,11 +24,11 @@ public class VehicleRepositoryTest {
         Motorcycle motoA2 = new Motorcycle("Kawasaki", "Z650", 2023, 160.0f, "MOTO_002", "A2");
         Motorcycle motoAM = new Motorcycle("Harley-Davidson", "Street Glide", 2023, 300.0f, "MOTO_003", "AM");
 
-        vehicleRepository.getVehicles().add(car);
-        vehicleRepository.getVehicles().add(car1);
-        vehicleRepository.getVehicles().add(motoA1);
-        vehicleRepository.getVehicles().add(motoA2);
-        vehicleRepository.getVehicles().add(motoAM);
+        vehicleRepository.addVehicle(car);
+        vehicleRepository.addVehicle(car1);
+        vehicleRepository.addVehicle(motoA1);
+        vehicleRepository.addVehicle(motoA2);
+        vehicleRepository.addVehicle(motoAM);
 
         vehicleRepository.save();
     }
@@ -51,8 +51,8 @@ public class VehicleRepositoryTest {
         Car car = new Car("BMW", "Series 3", 2021, 180.0f, "CAR_001");
         Motorcycle motoA1 = new Motorcycle("KTM", "Duke 125", 2022, 95.0f, "MOTO_001", "A1");
 
-        vehicleRepository.getVehicles().add(car);
-        vehicleRepository.getVehicles().add(motoA1);
+        vehicleRepository.addVehicle(car);
+        vehicleRepository.addVehicle(motoA1);
         vehicleRepository.save();
 
         VehicleRepository newRepo = new VehicleRepository();
