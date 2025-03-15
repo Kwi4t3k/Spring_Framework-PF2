@@ -1,0 +1,1 @@
+Zadanie1c:  Nadpisanie metod equals i hashCode dla pojazdów. Sprawdzenie czy działają poprawnie (to znaczy jak?)
