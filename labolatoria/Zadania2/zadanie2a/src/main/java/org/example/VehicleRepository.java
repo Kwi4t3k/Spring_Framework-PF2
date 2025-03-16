@@ -137,4 +137,16 @@ public class VehicleRepository implements IVehicleRepository {
         }
         return false;
     }
+
+    @Override
+    public void removeVehicle(String id) {
+        boolean removed = vehicles.removeIf(vehicle -> vehicle.getId().equals(id));
+
+        if (removed) {
+            save();
+            System.out.println("Usunięto pojazd o id: " + id);
+        } else {
+            System.out.println("Nie usunięto pojazdu o id: " + id);
+        }
+    }
 }

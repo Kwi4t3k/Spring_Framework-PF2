@@ -9,5 +9,6 @@ public interface IVehicleRepository {
     void save();
     void load();
 
-    void addVehicle(Vehicle vehicle); // dodatkowe do testów
+    void addVehicle(Vehicle vehicle);
+    void removeVehicle(String id);
 }
