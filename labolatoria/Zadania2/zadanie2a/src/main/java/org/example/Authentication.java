@@ -1,25 +1,25 @@
 package org.example;
 
 public class Authentication {
-    private final UserRepository userRepository;
+    private final IUserRepository userRepository;
 
-    public Authentication(UserRepository userRepository) {
+    public Authentication(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public boolean authenticate(String login, String password) {
+    public User authenticate(String login, String password) {
         User user = userRepository.getUser(login);
 
         if (user == null) {
             System.out.println("Nie ma takiego użytkowanika w bazie");
-            return false;
+            return null;
         }
         if (user.getPassword().equals(password)) {
             System.out.println("Witaj, " + login + "!");
-            return true;
+            return user;
         } else {
             System.out.println("Niepoprawne hasło");
-            return false;
+            return null;
         }
     }
 }
