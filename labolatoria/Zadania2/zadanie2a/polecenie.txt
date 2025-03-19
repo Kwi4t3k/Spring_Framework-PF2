@@ -15,3 +15,8 @@ samochód. Jakie to powinno być pole?
 Dodaj interfejs IUserRepository z metodą getUser oraz getUsers i save.
 Zaimplementuj te metody w klasie UserRepository.
 Dodaj klasę Authentication – z metodą sprawdzającą czy dane logowania są poprawne.
+
+
+
+dodać rejestrację tak żeby od razu do pliku było wstawiane hashowane hasło
+dodać rozkodowanie hasła

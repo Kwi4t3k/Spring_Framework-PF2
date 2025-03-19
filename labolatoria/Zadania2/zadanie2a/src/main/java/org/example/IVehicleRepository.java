@@ -11,4 +11,6 @@ public interface IVehicleRepository {
 
     void addVehicle(Vehicle vehicle);
     void removeVehicle(String id);
+
+    Vehicle getVehiclebyId(String id);
 }

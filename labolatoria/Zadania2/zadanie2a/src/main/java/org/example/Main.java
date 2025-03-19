@@ -1,5 +1,7 @@
 package org.example;
 
+//import org.apache.commons.codec.digest.DigestUtils;
+
 import java.util.Scanner;
 
 public class Main {
@@ -44,6 +46,9 @@ public class Main {
             scanner.nextLine();
 
             switch (wybor) {
+                case 0:
+                    System.out.println("Do widzenia");
+                    return;
                 case 1:
                     System.out.println("Dostępne pojazdy:");
                     boolean availableVehicles = false;
@@ -74,7 +79,7 @@ public class Main {
                     if (currentUser.getRentedVehicleId() == null) {
                         System.out.println("Podaj id pojazdu do wypożyczenia:");
                         String id = scanner.nextLine();
-                        Vehicle vehicle = vehicleRepository.getVehicles().get(id); // to jest źle bo get chce inta a jest string
+                        Vehicle vehicle = vehicleRepository.getVehiclebyId(id);
                         if (vehicle != null && !vehicle.isRented()) {
                             vehicleRepository.rentVehicle(id);
                             currentUser.rentVehicle(id);
@@ -86,6 +91,58 @@ public class Main {
                         }
                     } else {
                         System.out.println("Pojazd już jest wypożyczony przez ciebie");
+                    }
+                    break;
+                case 4:
+                    if (currentUser.getRentedVehicleId() != null) {
+                        String id = currentUser.getRentedVehicleId();
+                        Vehicle vehicle = vehicleRepository.getVehiclebyId(id);
+                        if (vehicle != null && vehicle.isRented()) {
+                            vehicleRepository.returnVehicle(id);
+                            currentUser.returnVehicle();
+                            userRepository.save();
+                            vehicleRepository.save();
+                            System.out.println("Pojazd został zwrócony");
+                        } else {
+                            System.out.println("Pojazd nie został zwrócony");
+                        }
+                    } else {
+                        System.out.println("Nie masz wypożyczonego pojazdu");
+                    }
+                    break;
+                case 5:
+                    System.out.println("Nazywasz się: " + currentUser.getLogin() + " | jesteś na poziomie: " + currentUser.getRole());
+                    break;
+                case 6:
+                    if (isAdmin) {
+                        System.out.println("Podaj typ pojazdu: (Car/Motorcycle)");
+                        String type = scanner.nextLine();
+
+                        System.out.println("Podaj markę pojazdu:");
+                        String brand = scanner.nextLine();
+
+                        System.out.println("Podaj model pojazdu:");
+                        String model = scanner.nextLine();
+
+                        System.out.println("Podaj rocznik pojazdu:");
+                        int year = Integer.parseInt(scanner.nextLine());
+
+                        System.out.println("Podaj cenę pojazdu:");
+                        float price = Float.parseFloat(scanner.nextLine());
+
+                        scanner.nextLine();
+
+                        Vehicle newVehicle;
+                        if (type.equalsIgnoreCase("Car")) {
+                            String id = vehicleRepository.generateNextID();
+                            newVehicle = new Car(brand, model, year, price, id);
+                        }
+                    }
+                case 8:
+                    if (isAdmin) {
+                        for (User user : userRepository.getUsers()) {
+                            System.out.println(user);
+                        }
                     }
                     break;
             }

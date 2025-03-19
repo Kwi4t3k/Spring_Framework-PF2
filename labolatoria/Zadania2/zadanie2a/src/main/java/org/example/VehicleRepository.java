@@ -36,16 +36,12 @@ public class VehicleRepository implements IVehicleRepository {
                 return;
             }
         }
-        System.out.println("Pojazd o id: " + id + " został zwrócony");
+        System.out.println("Pojazd o id: " + id + "nie został zwrócony");
     }
 
     @Override
     public List<Vehicle> getVehicles() {
-        List<Vehicle> clonedVehicles = new ArrayList<>();
-        for (Vehicle vehicle : vehicles) {
-            clonedVehicles.add(vehicle.clone());
-        }
-        return List.copyOf(clonedVehicles);
+        return new ArrayList<>(vehicles);
     }
 
     @Override
@@ -148,5 +144,15 @@ public class VehicleRepository implements IVehicleRepository {
         } else {
             System.out.println("Nie usunięto pojazdu o id: " + id);
         }
+    }
+
+    @Override
+    public Vehicle getVehiclebyId(String id) {
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getId().equals(id)) {
+                return vehicle;
+            }
+        }
+        return null;
     }
 }

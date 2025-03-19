@@ -1,5 +1,7 @@
 package org.example;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 public class User {
     private String login;
     private String password;
