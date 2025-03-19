@@ -136,6 +136,12 @@ public class Main {
                         if (type.equalsIgnoreCase("Car")) {
                             String id = vehicleRepository.generateNextID();
                             newVehicle = new Car(brand, model, year, price, id);
+                        } else if (type.equalsIgnoreCase("Motorcycle")) {
+                            System.out.println("Podaj kategorię pojazdu: (AM, A1, A2, A)");
+                            String category = scanner.nextLine();
+
+                            String id = vehicleRepository.generateNextID();
+                            newVehicle = new Motorcycle(brand, model, year, price, id, category);
                         }
                     }
                 case 8:
