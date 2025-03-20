@@ -26,7 +26,7 @@ public class User {
         return login;
     }
 
-    public String getPassword() {
+    protected String getPassword() {
         return password;
     }
 

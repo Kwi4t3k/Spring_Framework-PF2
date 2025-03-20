@@ -18,5 +18,5 @@ Dodaj klasę Authentication – z metodą sprawdzającą czy dane logowania są 
 
 
 
-dodać rejestrację tak żeby od razu do pliku było wstawiane hashowane hasło
-dodać rozkodowanie hasła
+dodać rejestrację tak żeby od razu do pliku było wstawiane hashowane hasło - dodatkowa rejestracja
+dodać tak żeby była zmiana id pojazdów tak żeby były po kolei jeśli usunie się coś ze środka albo żeby nowe były dodawane w tą lukę - dodatkowe

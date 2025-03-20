@@ -13,4 +13,7 @@ public interface IVehicleRepository {
     void removeVehicle(String id);
 
     Vehicle getVehiclebyId(String id);
+
+    String generateNextCarId();
+    String generateNextMotoId();
 }

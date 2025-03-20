@@ -7,6 +7,8 @@ import java.util.List;
 public class VehicleRepository implements IVehicleRepository {
     private final List<Vehicle> vehicles;
     private final String pathToFile = "src/main/resources/vehicles.txt";
+    private int nextCarId = 1;
+    private int nextMotoId = 1;
 
     public VehicleRepository() {
         this.vehicles = new ArrayList<>();
@@ -23,7 +25,7 @@ public class VehicleRepository implements IVehicleRepository {
                 return;
             }
         }
-        System.out.println("Pojazd o id: " + id + " został już wypożyczony lub nie istnieje");
+        System.err.println("Pojazd o id: " + id + " został już wypożyczony lub nie istnieje");
     }
 
     @Override
@@ -36,7 +38,7 @@ public class VehicleRepository implements IVehicleRepository {
                 return;
             }
         }
-        System.out.println("Pojazd o id: " + id + "nie został zwrócony");
+        System.err.println("Pojazd o id: " + id + "nie został zwrócony");
     }
 
     @Override
@@ -69,7 +71,7 @@ public class VehicleRepository implements IVehicleRepository {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
-                if (parts.length == 6) {
+                if (parts.length == 6) { // Samochód
                     String brand = parts[0];
                     String model = parts[1];
                     int year = Integer.parseInt(parts[2]);
@@ -80,7 +82,14 @@ public class VehicleRepository implements IVehicleRepository {
                     Car car = new Car(brand, model, year, price, id);
                     car.setRented(rented);
                     vehicles.add(car);
-                } else if (parts.length == 7) {
+
+                    if (id.startsWith("CAR_")) {
+                        int num = Integer.parseInt(id.substring(4)); // CAR_001 -> 1
+                        if (num >= nextCarId) {
+                            nextCarId = num + 1;
+                        }
+                    }
+                } else if (parts.length == 7) { // Motocykl
                     String brand = parts[0];
                     String model = parts[1];
                     int year = Integer.parseInt(parts[2]);
@@ -92,6 +101,13 @@ public class VehicleRepository implements IVehicleRepository {
                     Motorcycle motorcycle = new Motorcycle(brand, model, year, price, id, category);
                     motorcycle.setRented(rented);
                     vehicles.add(motorcycle);
+
+                    if (id.startsWith("MOTO_")) {
+                        int num = Integer.parseInt(id.substring(5)); // MOTO_001 -> 1
+                        if (num >= nextMotoId) {
+                            nextMotoId = num + 1;
+                        }
+                    }
                 }
             }
 
@@ -100,17 +116,17 @@ public class VehicleRepository implements IVehicleRepository {
         }
     }
 
-    @Override // dodatkowe do testów
+    @Override
     public void addVehicle(Vehicle vehicle) {
         for (Vehicle v : vehicles) {
             if (v.getId().equals(vehicle.getId())) {
-                System.out.println("Pojazd o id: " + vehicle.getId() + " już intnieje w pamięci");
+                System.err.println("Pojazd o id: " + vehicle.getId() + " już intnieje w pamięci");
                 return;
             }
         }
 
         if (ifIdExistsInFile(vehicle.getId())) {
-            System.out.println("Pojazd o id: " + vehicle.getId() + " już istnieje w pliku");
+            System.err.println("Pojazd o id: " + vehicle.getId() + " już istnieje w pliku");
             return;
         }
 
@@ -136,13 +152,19 @@ public class VehicleRepository implements IVehicleRepository {
 
     @Override
     public void removeVehicle(String id) {
-        boolean removed = vehicles.removeIf(vehicle -> vehicle.getId().equals(id));
+        Vehicle vehicleToRemove = getVehiclebyId(id);
 
-        if (removed) {
-            save();
-            System.out.println("Usunięto pojazd o id: " + id);
+        if (vehicleToRemove != null && !vehicleToRemove.isRented()) {
+            boolean removed = vehicles.removeIf(vehicle -> vehicle.getId().equals(id));
+
+            if (removed) {
+                save();
+                System.out.println("Usunięto pojazd o id: " + id);
+            } else {
+                System.err.println("Nie usunięto pojazdu o id: " + id);
+            }
         } else {
-            System.out.println("Nie usunięto pojazdu o id: " + id);
+            System.err.println("Nie możesz usunąć wypożyczonego pojazdu");
         }
     }
 
@@ -154,5 +176,15 @@ public class VehicleRepository implements IVehicleRepository {
             }
         }
         return null;
+    }
+
+    @Override
+    public String generateNextCarId() {
+        return String.format("CAR_%03d", nextCarId++);
+    }
+
+    @Override
+    public String generateNextMotoId() {
+        return String.format("MOTO_%03d", nextMotoId++);
     }
 }
