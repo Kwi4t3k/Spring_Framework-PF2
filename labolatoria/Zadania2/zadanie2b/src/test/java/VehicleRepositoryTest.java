@@ -1,6 +1,6 @@
 //import org.example.Car;
 //import org.example.Motorcycle;
-//import org.example.VehicleRepository;
+//import org.example.repositories.VehicleRepository;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //

@@ -1,5 +1,5 @@
 //import org.example.Car;
-//import org.example.Vehicle;
+//import org.example.models.Vehicle;
 //
 //public class HashCodeTest {
 //    public static void main(String[] args) {

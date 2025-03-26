@@ -1,5 +1,5 @@
 //import org.example.Car;
-//import org.example.Vehicle;
+//import org.example.models.Vehicle;
 //import org.junit.jupiter.api.Test;
 //
 //import java.util.HashSet;
