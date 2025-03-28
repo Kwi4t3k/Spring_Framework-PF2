@@ -11,3 +11,14 @@ Admin może dodawać pojazdy i usuwać, oraz przeglądać wszystkie, również w
 
 Opcjonalnie - Przeniesienie logiki związanej z dostępem do danych – zamiast bezpośrednio używać repozytorium w main/app to użycie klas Service.
 Zaproponowanie metod takich serwisów.
+
+
+
+ogin;haslo,rola:
+admin;admin,ADMIN
+kamil,kamil123,USER
+
+
+
+
+[{"id":"3","brand":"Toyota","model":"Corolla","year":2024,"category":"Car","plate":"LU789","rented":false,"attributes":{}},{"id":"2","brand":"Honda","model":"CBR600","year":2016,"category":"Motorcycle","plate":"LU456","rented":false,"attributes":{"licence_category":"A","drive":"chain"}},{"id":"1","brand":"Volkswagen","model":"T2","year":1985,"category":"Bus","plate":"LU123","rented":false,"attributes":{"seats":20.0}}]

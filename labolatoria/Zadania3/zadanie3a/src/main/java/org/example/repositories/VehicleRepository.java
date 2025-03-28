@@ -10,4 +10,6 @@ public interface VehicleRepository {
     Optional<Vehicle> findById(String id);
     Vehicle save(Vehicle vehicle);
     void deleteById(String id);
+
+    String generateNextAvailableId();
 }

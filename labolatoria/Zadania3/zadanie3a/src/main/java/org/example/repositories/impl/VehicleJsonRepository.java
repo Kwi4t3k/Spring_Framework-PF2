@@ -32,7 +32,7 @@ public class VehicleJsonRepository implements VehicleRepository {
     @Override
     public Vehicle save(Vehicle vehicle) {
         if (vehicle.getId() == null || vehicle.getId().isBlank()) {
-            vehicle.setId(UUID.randomUUID().toString());
+            vehicle.setId(generateNextAvailableId());
         } else {
             deleteById(vehicle.getId());
         }
@@ -45,5 +45,17 @@ public class VehicleJsonRepository implements VehicleRepository {
     public void deleteById(String id) {
         vehicles.removeIf(v -> v.getId().equals(id));
         storage.save(vehicles);
+    }
+
+    @Override
+    public String generateNextAvailableId() {
+        int id = 1;
+
+        while (true) {
+            String idStr = String.valueOf(id);
+            boolean exists = vehicles.stream().anyMatch(v -> v.getId().equals(idStr));
+            if (!exists) return idStr;
+            id++;
+        }
     }
 }
