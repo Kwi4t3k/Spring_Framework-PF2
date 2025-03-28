@@ -1,1 +1,1 @@
-Zadanie1b: Uniemożliwienie zmian w pojazdach w repozytorium z poza klasy repozytorium.
+Zadanie1b: Uniemożliwienie zmian w pojazdach w repozytorium z poza klasy repozytorium
