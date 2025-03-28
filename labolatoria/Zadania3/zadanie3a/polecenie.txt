@@ -1,0 +1,13 @@
+Instrukcje
+Przerobienie klas: Vehicle,User, dodanie klasy Rental – wypożyczenie.
+Przerobienie/utworzenie klas Repozytoriów: VehicleRepository,UserRepository,RentalRepository
+
+Umieszczenie logiki odpowiadajacej za login i rejestrację w klasie AuthService.
+Użycie Bcrypt(jbcrypt) do hashowania i sprawdzania hasła.
+Dwie metody: login i register, co powinny zwracać?
+
+Utworzenie logiki do wypożyczania i zwracania pojazdów wykorzystując nowe repozytoria.
+Admin może dodawać pojazdy i usuwać, oraz przeglądać wszystkie, również wypożyczone. User może wypożyczyć i zwrócić pojazd. Widzi tylko dostępne pojazdy.
+
+Opcjonalnie - Przeniesienie logiki związanej z dostępem do danych – zamiast bezpośrednio używać repozytorium w main/app to użycie klas Service.
+Zaproponowanie metod takich serwisów.

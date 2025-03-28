@@ -15,7 +15,7 @@ public class RentalJsonRepository implements RentalRepository {
 
     private final List<Rental> rentals;
 
-    public RentalJsonRepository(List<Rental> rentals) {
+    public RentalJsonRepository() {
         this.rentals = new ArrayList<>(storage.load());
     }
 

@@ -13,20 +13,13 @@ import java.util.Map;
 @Builder
 
 public class Vehicle {
-    private String brand, model;
-    private int year;
-    private float price;
-    private boolean rented;
     private String id;
-
-//    public Vehicle(String brand, String model, int year, float price, String id) {
-//        this.brand = brand;
-//        this.model = model;
-//        this.year = year;
-//        this.price = price;
-//        this.rented = false;
-//        this.id = id;
-//    }
+    private String brand;
+    private String model;
+    private int year;
+    private String category;
+    private String plate;
+    private boolean rented;
 
     @Builder.Default
     private Map<String, Object> attributes = Map.of();

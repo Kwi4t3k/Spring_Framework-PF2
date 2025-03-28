@@ -15,7 +15,7 @@ public class VehicleJsonRepository implements VehicleRepository {
 
     private final List<Vehicle> vehicles;
 
-    public VehicleJsonRepository(List<Vehicle> vehicles) {
+    public VehicleJsonRepository() {
         this.vehicles = new ArrayList<>(storage.load());
     }
 

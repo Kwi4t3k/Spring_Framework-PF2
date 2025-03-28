@@ -16,7 +16,7 @@ public class UserJsonRepository implements UserRepository {
 
     private final List<User> users;
 
-    public UserJsonRepository(List<User> users) {
+    public UserJsonRepository() {
         this.users = new ArrayList<>(storage.load());
     }
 
