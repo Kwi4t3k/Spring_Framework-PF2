@@ -9,5 +9,7 @@
   - [Zadanie 2a](labolatoria/Zadania2/zadanie2a)
 - **Zadania 3**
   - [Zadanie 3a](labolatoria/Zadania3/zadanie3a)
+- **Zadania 4**
+  - [Zadanie 4a](labolatoria/Zadania4/zadanie4a)
 
 # Projekt
