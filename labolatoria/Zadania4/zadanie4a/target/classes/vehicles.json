@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "category": "Bus",
+    "brand": "Volkswagen",
+    "model": "T2",
+    "year": 1985,
+    "plate": "LU123",
+    "price": 100.0,
+    "attributes": {
+      "seats": 20
+    }
+  },
+  {
+    "id": "2",
+    "category":"Motorcycle",
+    "brand": "Honda",
+    "model": "CBR600",
+    "year": 2016,
+    "plate": "LU456",
+    "price": 200.0,
+    "attributes": {
+      "licence_category": "A",
+      "drive": "chain"
+    }
+  },
+  {
+    "id": "3",
+    "category": "Car",
+    "brand": "Toyota",
+    "model": "Corolla",
+    "year": 2024,
+    "plate": "LU789",
+    "price": 300.0,
+    "attributes": {}
+  }
+]

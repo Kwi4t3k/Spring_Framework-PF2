@@ -1,0 +1,26 @@
+Instrukcje
+Proszę założyć kotno:
+
+neon.tech
+
+Utworzyć tabelki oraz uzupełnić danymi, nastepnie wykonać polecenia z TODO:
+
+ Intelij po pobraniu projektu, może wyświetlić okno  (z menu intelij View) z wszystkimi todo(Tool Windows->TODO)
+
+Szablon  aplikacji wraz z niezbędnymi plikami oraz poleceniami:
+
+https://github.com/umcsuser/jdbstudent.git
+
+
+
+Uwaga! domyślnie SQL przy edycji i usuwaniu pojazdu gdy jest on już rental uniemożliwi dokonanie tych operacji.
+
+Są różne metody radzenia sobie z tym problemem.
+Na początek można usunąć wpisy kaskadowo:
+ON DELETE CASCADE  (zupdateowany plik z inicjalizacja tabelek)
+
+
+
+ogin;haslo,rola:
+admin;admin,ADMIN
+kamil,kamil123,USER

@@ -1,0 +1,6 @@
+BMW;Series 3;2021;180.0;CAR_001;false
+KTM;Duke 125;2022;95.0;MOTO_001;false;A1
+Kawasaki;Z650;2023;160.0;MOTO_002;false;A2
+Harley-Davidson;Street Glide;2023;300.0;MOTO_003;false;AM
+Toyota;Corrola;2010;150.0;CAR_002;false
+Yamaha;MT-07;2022;180.0;MOTO_004;false;A2

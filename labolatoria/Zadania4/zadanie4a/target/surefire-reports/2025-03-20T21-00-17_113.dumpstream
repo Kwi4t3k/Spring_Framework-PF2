@@ -1,0 +1,5 @@
+# Created at 2025-03-20T21:00:17.378
+Boot Manifest-JAR contains absolute paths in classpath 'D:\szkola\studia\4 sem\Spring_Framework-PF2\labolatoria\Zadania2\zadanie2a\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
