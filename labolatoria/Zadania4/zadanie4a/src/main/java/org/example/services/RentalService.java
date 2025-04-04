@@ -68,4 +68,8 @@ public class RentalService {
                 .filter(r -> r.getReturnDateTime() == null)
                 .findFirst();
     }
+
+    public Optional<Rental> getRentalByVehicleId(String vehicleId) {
+        return rentalRepository.findByVehicleIdAndReturnDateIsNull(vehicleId);
+    }
 }

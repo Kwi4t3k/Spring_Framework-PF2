@@ -4,6 +4,7 @@ import org.example.models.User;
 import org.example.repositories.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AuthService {
@@ -34,5 +35,13 @@ public class AuthService {
         userRepository.save(user);
         System.out.println("Zarejestrowano pomyślnie.");
         return true;
+    }
+
+    public boolean isLoginTaken(String newLogin) {
+        return userRepository.findByLogin(newLogin).isPresent();
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

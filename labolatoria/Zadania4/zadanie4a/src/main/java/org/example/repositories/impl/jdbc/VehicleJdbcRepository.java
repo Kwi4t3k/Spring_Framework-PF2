@@ -2,6 +2,7 @@ package org.example.repositories.impl.jdbc;
 
 import java.sql.*;
 import java.util.*;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.db.JdbcConnectionManager;
@@ -23,7 +24,8 @@ public class VehicleJdbcRepository implements VehicleRepository {
 
             while (rs.next()) {
                 String attrJson = rs.getString("attributes");
-                Map<String, Object> attributes = gson.fromJson(attrJson, new TypeToken<Map<String, Object>>(){}.getType());
+                Map<String, Object> attributes = gson.fromJson(attrJson, new TypeToken<Map<String, Object>>() {
+                }.getType());
 
                 Vehicle vehicle = Vehicle.builder()
                         .id(rs.getString("id"))
@@ -53,7 +55,8 @@ public class VehicleJdbcRepository implements VehicleRepository {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     String attrJson = rs.getString("attributes");
-                    Map<String, Object> attributes = gson.fromJson(attrJson, new TypeToken<Map<String, Object>>(){}.getType());
+                    Map<String, Object> attributes = gson.fromJson(attrJson, new TypeToken<Map<String, Object>>() {
+                    }.getType());
 
                     Vehicle vehicle = Vehicle.builder()
                             .id(rs.getString("id"))
@@ -78,28 +81,51 @@ public class VehicleJdbcRepository implements VehicleRepository {
     public Vehicle save(Vehicle vehicle) {
         if (vehicle.getId() == null || vehicle.getId().isBlank()) {
             vehicle.setId(UUID.randomUUID().toString());
-        //TODO:Zamiast usuwania dopisać sprawdzenie czy jest id w tabeli, jak tak zrobić sql update,jak nie-wstawic nowy pojazd
+        }
+
+        Optional<Vehicle> existingVehicle = findById(vehicle.getId());
+
+        if (existingVehicle.isPresent()) {
+            String sql = "UPDATE vehicle SET category = ?, brand = ?, model = ?, year = ?, plate = ?, price = ?, attributes = ?::jsonb WHERE id = ?";
+
+            try (Connection connection = JdbcConnectionManager.getInstance().getConnection();
+                 PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                stmt.setString(1, vehicle.getCategory());
+                stmt.setString(2, vehicle.getBrand());
+                stmt.setString(3, vehicle.getModel());
+                stmt.setInt(4, vehicle.getYear());
+                stmt.setString(5, vehicle.getPlate());
+                stmt.setDouble(6, vehicle.getPrice());
+                stmt.setString(7, gson.toJson(vehicle.getAttributes()));
+                stmt.setString(8, vehicle.getId());  // Zmieniamy pojazd o tym ID
+
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException("Błąd podczas aktualizacji pojazdu", e);
+            }
+
         } else {
-            deleteById(vehicle.getId());
+            String sql = "INSERT INTO vehicle (id, category, brand, model, year, plate, price, attributes) VALUES (?, ?, ?, ?, ?, ?, ?, ?::jsonb)";
+
+            try (Connection connection = JdbcConnectionManager.getInstance().getConnection();
+                 PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                stmt.setString(1, vehicle.getId());
+                stmt.setString(2, vehicle.getCategory());
+                stmt.setString(3, vehicle.getBrand());
+                stmt.setString(4, vehicle.getModel());
+                stmt.setInt(5, vehicle.getYear());
+                stmt.setString(6, vehicle.getPlate());
+                stmt.setDouble(7, vehicle.getPrice());
+                stmt.setString(8, gson.toJson(vehicle.getAttributes()));
+
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException("Błąd podczas dodawania pojazdu", e);
+            }
         }
 
-        String sql = "INSERT INTO vehicle (id, category, brand, model, year, plate, price, attributes) VALUES (?, ?, ?, ?, ?, ?, ?, ?::jsonb)";
-        try (Connection connection = JdbcConnectionManager.getInstance().getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-
-            stmt.setString(1, vehicle.getId());
-            stmt.setString(2, vehicle.getCategory());
-            stmt.setString(3, vehicle.getBrand());
-            stmt.setString(4, vehicle.getModel());
-            stmt.setInt(5, vehicle.getYear());
-            stmt.setString(6, vehicle.getPlate());
-            stmt.setDouble(7, vehicle.getPrice());
-            stmt.setString(8, gson.toJson(vehicle.getAttributes()));
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error occurred while saving vehicle", e);
-        }
         return vehicle;
     }
 
