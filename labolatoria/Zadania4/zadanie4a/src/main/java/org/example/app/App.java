@@ -225,7 +225,7 @@ public class App {
         Map<String, Object> attributes = new HashMap<>();
         if (category.equalsIgnoreCase("Bus")) {
             System.out.print("Liczba miejsc: ");
-            attributes.put("seats", Integer.parseInt(scanner.nextLine()));
+            attributes.put("seats", Optional.of(Integer.parseInt(scanner.nextLine())));
         } else if (category.equalsIgnoreCase("Motorcycle")) {
             System.out.print("Kategoria prawa jazdy: ");
             attributes.put("licence_category", scanner.nextLine());
