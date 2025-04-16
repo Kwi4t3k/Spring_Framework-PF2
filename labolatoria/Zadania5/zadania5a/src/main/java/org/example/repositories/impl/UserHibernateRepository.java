@@ -13,6 +13,10 @@ import java.util.Optional;
 public class UserHibernateRepository implements UserRepository {
     private Session session;
 
+    public UserHibernateRepository(Session session) {
+        this.session = session;
+    }
+
     @Override
     public List<User> findAll() {
         return session.createQuery("FROM User", User.class).list();

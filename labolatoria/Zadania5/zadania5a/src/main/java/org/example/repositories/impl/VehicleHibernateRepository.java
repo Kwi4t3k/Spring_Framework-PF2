@@ -12,6 +12,10 @@ import java.util.Optional;
 public class VehicleHibernateRepository implements VehicleRepository {
     Session session;
 
+    public VehicleHibernateRepository(Session session) {
+        this.session = session;
+    }
+
     @Override
     public List<Vehicle> findAll() {
         return session.createQuery("from Vehicle", Vehicle.class).list();

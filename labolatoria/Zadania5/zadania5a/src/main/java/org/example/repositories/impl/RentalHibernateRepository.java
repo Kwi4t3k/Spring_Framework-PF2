@@ -9,9 +9,14 @@ import org.hibernate.query.Query;
 import java.util.List;
 import java.util.Optional;
 
+
 @Setter
 public class RentalHibernateRepository implements RentalRepository {
     private Session session;
+
+    public RentalHibernateRepository(Session session) {
+        this.session = session;
+    }
 
     @Override
     public List<Rental> findAll() {
