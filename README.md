@@ -13,6 +13,6 @@
   ### [baza danych](https://console.neon.tech/app/projects/patient-bonus-99368788/branches/br-winter-sound-abjgkzly?branchId=br-winter-sound-abjgkzly&database=database)
   - [Zadanie 4a](labolatoria/Zadania4/zadanie4a)
 - **Zadania 5**
-  - [Zadanie 5a](labolatoria/Zadania5/zadanie5a)
+  - [Zadanie 5a](labolatoria/Zadania5/zadania5a)
 
 # Projekt
