@@ -7,6 +7,7 @@ import org.example.services.AuthService;
 import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,6 +65,14 @@ public class AuthHibernateService implements AuthService {
                 System.out.println("Nie znaleziono użytkownika o tym loginie.");
             }
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+            userHibernateRepository.setSession(session);
+            return userHibernateRepository.findAll();
         }
     }
 }
