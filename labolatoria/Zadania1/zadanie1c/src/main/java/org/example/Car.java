@@ -14,4 +14,14 @@ public class Car extends Vehicle {
     public Vehicle clone() {
         return new Car(getBrand(), getModel(), getYear(), getPrice(), getId());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

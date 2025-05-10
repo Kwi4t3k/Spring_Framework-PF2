@@ -63,18 +63,14 @@ public abstract class Vehicle {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         Vehicle vehicle = (Vehicle) obj;
-        return Objects.equals(id, vehicle.id);
+        return Objects.equals(this.getId(), vehicle.getId()) && this.getYear() == vehicle.getYear() && Double.compare(vehicle.getPrice(), this.getPrice()) == 0 && this.isRented() == vehicle.isRented() && Objects.equals(this.getBrand(), vehicle.getBrand()) && Objects.equals(this.getModel(), vehicle.getModel());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(this.getId(), this.getBrand(), this.getModel(), this.getYear(), this.getPrice(), this.isRented());
     }
 }

@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Objects;
+
 public class Motorcycle extends Vehicle {
     private final String category; // kategoria prawa jazdy (AM, A1, A2, A)
 
@@ -25,5 +27,17 @@ public class Motorcycle extends Vehicle {
     @Override
     public String toString() {
         return super.toString().replace("}", ", category='" + category + "'}");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj)) return false;
+        Motorcycle motorcycle = (Motorcycle) obj;
+        return Objects.equals(category, motorcycle.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + Objects.hash(category);
     }
 }
