@@ -55,7 +55,7 @@ public class HibernateRentalService implements RentalService {
                    .id(UUID.randomUUID().toString())
                    .vehicle(vehicle)
                    .user(user)
-                   .rentDateTime(null)
+                   .rentDateTime(LocalDateTime.now().toString())
                    .build();
 
            rentalRepo.save(rental);

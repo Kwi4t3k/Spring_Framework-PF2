@@ -1,6 +1,6 @@
 package org.example.repositories.impl.hibernate;
 
-import lombok.Setter;
+//import lombok.Setter;
 import org.example.models.User;
 import org.example.repositories.UserRepository;
 import org.hibernate.Session;
@@ -8,9 +8,13 @@ import org.hibernate.Session;
 import java.util.List;
 import java.util.Optional;
 
-@Setter
+//@Setter
 public class UserHibernateRepository implements UserRepository {
     private Session session;
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
 
     @Override
     public List<User> findAll() {
