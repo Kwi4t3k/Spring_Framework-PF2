@@ -1,39 +1,5 @@
 Instrukcje
-1.Implementacja serwisów:
-public interface VehicleService {
+Dodanie logowania i zabezpieczenia endpointów do aplikacji wypożyczalni w Spring.
+SpringSecurity + JWT
 
-    List<Vehicle> findAll();
-
-    List<Vehicle> findAllActive();
-
-    Optional<Vehicle> findById(String id);
-
-    Vehicle save(Vehicle vehicle);
-
-    List<Vehicle> findAvailableVehicles();
-
-    List<Vehicle> findRentedVehicles();
-
-    boolean isAvailable(String vehicleId);
-
-    //"it should be soft delete"
-    void deleteById(String id);
-}
-
-public interface RentalService {
-
-    boolean isVehicleRented(String vehicleId);
-
-    Optional<Rental> findActiveRentalByVehicleId(String vehicleId);
-
-    Rental rent(String vehicleId, String userId);
-
-    boolean returnRental(String vehicleId, String userId);
-
-    List<Rental> findAll();
-}
-
-2.  Utworzenie kontrolerów oraz użycie serwisów zapewniając funkcje dodawania, usuwania pojazdów(zamiast zwykłego usunięcia - soft delete ),
-wypożyczania i zwracania. Oraz przeglądania danych.
-
-Uwaga! W tej części zadania - Bez podziału na role i bez logowania/rejestracji
+Zmiana wypożyczenia i zwracania pojazdów wykorzystując id zalogowanego użytkownika.
