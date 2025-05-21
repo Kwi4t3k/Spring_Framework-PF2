@@ -17,5 +17,7 @@
   - [Zadanie 5b](labolatoria/Zadania5/zadanie5b)
 - **Zadania 6**
   - [Zadanie 6](labolatoria/Zadania6/zadanie6a)
+- **Zadania 7**
+  - [Zadanie 7](labolatoria/Zadania7/zadanie7a)
     
 # Projekt
