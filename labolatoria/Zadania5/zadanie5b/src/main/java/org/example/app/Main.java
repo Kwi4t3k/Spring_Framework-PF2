@@ -24,7 +24,7 @@ import org.example.services.simple.SimpleVehicleService;
 
 public class Main {
     public static void main(String[] args) {
-        String storageType = "hibernate";
+        String storageType = "jdbc";
 
         UserRepository userRepo;
         VehicleRepository vehicleRepo;

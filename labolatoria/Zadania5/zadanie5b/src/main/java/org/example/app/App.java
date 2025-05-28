@@ -207,14 +207,22 @@ public class App {
         double price = Double.parseDouble(scanner.nextLine());
 
         Map<String, Object> attributes = new HashMap<>();
-        if (category.equalsIgnoreCase("Bus")) {
-            System.out.print("Liczba miejsc: ");
-            attributes.put("seats", Optional.of(Integer.parseInt(scanner.nextLine())));
-        } else if (category.equalsIgnoreCase("Motorcycle")) {
-            System.out.print("Kategoria prawa jazdy: ");
-            attributes.put("licence_category", scanner.nextLine());
-            System.out.print("Rodzaj napędu: ");
-            attributes.put("drive", scanner.nextLine());
+
+        if (category.equalsIgnoreCase("Car") || category.equalsIgnoreCase("Bus")) {
+            System.out.print("Czy chcesz dodać liczbę miejsc? (tak/nie): ");
+            if (scanner.nextLine().equalsIgnoreCase("tak")) {
+                System.out.print("Liczba miejsc: ");
+                int seats = Integer.parseInt(scanner.nextLine());
+                attributes.put("seats", seats);
+            }
+        }
+
+        if (category.equalsIgnoreCase("Motorcycle")) {
+            System.out.print("Czy chcesz dodać kategorię prawa jazdy? (tak/nie): ");
+            if (scanner.nextLine().equalsIgnoreCase("tak")) {
+                System.out.print("Kategoria prawa jazdy: ");
+                attributes.put("licence_category", scanner.nextLine());
+            }
         }
 
         Vehicle newVehicle = Vehicle.builder()
