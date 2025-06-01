@@ -1,0 +1,10 @@
+Instrukcje
+Zaimplementuj w projekcie wiele ról użytkownika (wiele do wielu)
+Zaimplementuj rejestrację nowego użytkownika
+Zaimplementuj metody admina - usunięcie usera(soft delete), pobranie danych o wszystkich userach, odbieranie ról użytkownikom, nadanie nowej roli użytkownikowi.
+
+Uwaga! Gdy user otrzymał token - po softdelete powinien nie móc przeglądać zasobów!
+
+
+
+Chętni - zabezpieczenie endpointów dotyczących danych zalogowanego użytkownika
