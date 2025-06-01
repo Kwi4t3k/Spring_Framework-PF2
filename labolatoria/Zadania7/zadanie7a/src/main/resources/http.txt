@@ -1,0 +1,68 @@
+#vehicle
+
+#pojazdy
+GET http://localhost:8080/api/vehicles
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc0ODQ1NTU1OSwiZXhwIjoxNzQ4NDU5MTU5fQ.fDv6Ud-72z6l7NSpDQNFc51ivnB0ckP7pe-3tdMgxmE
+
+#wypożyczanie
+###
+POST http://localhost:8080/api/vehicles
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc0ODQ1NTU1OSwiZXhwIjoxNzQ4NDU5MTU5fQ.fDv6Ud-72z6l7NSpDQNFc51ivnB0ckP7pe-3tdMgxmE
+Content-Type: application/json
+
+{
+  "category": "Car",
+  "plate": "XYZ123",
+  "brand": "Toyota",
+  "model": "Corolla",
+  "year": 2023,
+  "price": 150.0,
+  "attributes": {
+    "seats": 5
+  }
+}
+
+
+###
+DELETE http://localhost:8080/api/vehicles/ed356c97-36e1-4e48-8f77-39b515ef0dfc
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc0ODQ1NTU1OSwiZXhwIjoxNzQ4NDU5MTU5fQ.fDv6Ud-72z6l7NSpDQNFc51ivnB0ckP7pe-3tdMgxmE
+
+
+# rental
+
+###
+GET http://localhost:8080/api/rentals/all
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc0ODQ1ODQ2OSwiZXhwIjoxNzQ4NDYyMDY5fQ.m-XphXHWq2LaD7F9ymzlbEO-vQvjRf9QzIYjjKz-FlE
+
+
+###
+POST http://localhost:8080/api/rentals/rent
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc0ODQ1ODQ2OSwiZXhwIjoxNzQ4NDYyMDY5fQ.m-XphXHWq2LaD7F9ymzlbEO-vQvjRf9QzIYjjKz-FlE
+
+{
+  "vehicleId": "ed356c97-36e1-4e48-8f77-39b515ef0dfc"
+}
+
+
+###
+POST http://localhost:8080/api/rentals/return
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc0ODQ1ODQ2OSwiZXhwIjoxNzQ4NDYyMDY5fQ.m-XphXHWq2LaD7F9ymzlbEO-vQvjRf9QzIYjjKz-FlE
+
+{
+  "vehicleId": "1"
+}
+
+
+###
+#auth
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "login":"admin",
+    "password":"admin"
+}

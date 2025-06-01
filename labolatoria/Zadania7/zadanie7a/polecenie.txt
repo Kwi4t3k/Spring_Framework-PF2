@@ -3,3 +3,5 @@ Dodanie logowania i zabezpieczenia endpointów do aplikacji wypożyczalni w Spri
 SpringSecurity + JWT
 
 Zmiana wypożyczenia i zwracania pojazdów wykorzystując id zalogowanego użytkownika.
+
+Pamiętamy, że należy również zaimplementować dodawanie i usuwanie pojazdów przez admina.

@@ -1,8 +1,8 @@
 package org.example.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.model.User;
 import org.example.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

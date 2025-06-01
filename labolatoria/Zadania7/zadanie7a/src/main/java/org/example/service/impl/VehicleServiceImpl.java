@@ -47,7 +47,8 @@ public class VehicleServiceImpl implements VehicleService {
             vehicle.setId(UUID.randomUUID().toString());
             vehicle.setActive(true);
         }
-        return vehicleRepository.save(vehicle);
+        Vehicle savedVehicle = vehicleRepository.save(vehicle);
+        return savedVehicle;
     }
 
     @Override
@@ -66,7 +67,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public boolean isAvailable(String vehicleId) {
-        return rentalRepository.findByVehicleIdAndReturnDateIsNull(vehicleId).isEmpty();
+        boolean active = vehicleRepository.findByIdAndIsActiveTrue(vehicleId).isPresent();
+        boolean notRented = rentalRepository.findByVehicleIdAndReturnDateIsNull(vehicleId).isEmpty();
+        return active && notRented;
     }
 
     @Override
@@ -74,13 +77,12 @@ public class VehicleServiceImpl implements VehicleService {
         if(rentalRepository.existsByVehicleIdAndReturnDateIsNull(id)) {
             throw new IllegalStateException("Vehicle " + id + " is rented.");
         }
-
         Optional<Vehicle> vehicle = vehicleRepository.findByIdAndIsActiveTrue(id);
-        if (vehicle.isPresent()) {
+        if(vehicle.isEmpty()) {
+            throw new IllegalStateException("Vehicle " + id + " not found.");
+        } else {
             vehicle.get().setActive(false);
             vehicleRepository.save(vehicle.get());
-        } else {
-            throw new IllegalStateException("Vehicle " + id + " not found.");
         }
     }
 }

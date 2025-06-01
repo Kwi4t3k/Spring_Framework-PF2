@@ -18,8 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rentals")
 public class RentalController {
+    private final RentalService rentalService;
     private final UserRepository userRepository;
-    private RentalService rentalService;
 
     @Autowired
     public RentalController(RentalService rentalService, UserRepository userRepository) {
@@ -28,7 +28,7 @@ public class RentalController {
     }
 
     @GetMapping("/all")
-    public List<Rental> getRentals() {
+    public List<Rental> getAllRentals() {
         return rentalService.findAll();
     }
 

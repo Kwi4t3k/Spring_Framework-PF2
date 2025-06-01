@@ -1,7 +1,6 @@
 package org.example.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.example.model.Rental;
 import org.example.model.User;
 import org.example.model.Vehicle;
@@ -12,6 +11,7 @@ import org.example.service.RentalService;
 import org.example.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,8 +61,8 @@ public class RentalServiceImpl implements RentalService {
                 .rentDate(LocalDateTime.now())
                 .returnDate(null)
                 .build();
-
-        return rentalRepository.save(newRental);
+        Rental savedRental = rentalRepository.save(newRental);
+        return savedRental;
     }
 
     @Override

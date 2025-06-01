@@ -27,6 +27,16 @@ public class VehicleController {
         return vehicleService.findAll();
     }
 
+    @GetMapping("/allActive")
+    public List<Vehicle> getAllActiveVehicles() {
+        return vehicleService.findAllActive();
+    }
+
+    @GetMapping("/allAvailable")
+    public List<Vehicle> getAllAvailableVehicles() {
+        return vehicleService.findAvailableVehicles();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Vehicle> getVehicleById(@PathVariable String id) {
         logger.info("Request received for vehicle with ID: {}", id);
@@ -34,22 +44,11 @@ public class VehicleController {
                 .map(vehicle -> {
                     logger.info("Found vehicle with ID: {}", id);
                     return ResponseEntity.ok(vehicle);
-                    // 200 OK z obiektem Vehicle
                 })
                 .orElseGet(() -> {
                     logger.info("Vehicle with ID: {} not found", id);
                     return ResponseEntity.notFound().build(); // 404
                 });
-    }
-
-    @GetMapping("/allActive")
-    public List<Vehicle> getAllActiveVehicles(){
-        return this.vehicleService.findAllActive();
-    }
-
-    @GetMapping("/allAvailable")
-    public List<Vehicle> getAvailableVehicles(){
-        return this.vehicleService.findAvailableVehicles();
     }
 
     @PostMapping
@@ -64,7 +63,13 @@ public class VehicleController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteVehicle(@PathVariable String id){
-        this.vehicleService.deleteById(id);
+    public ResponseEntity<String> deleteVehicle(@PathVariable String id) {
+        try {
+            vehicleService.deleteById(id);
+            return ResponseEntity.ok("Vehicle with ID: " + id + " deleted.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

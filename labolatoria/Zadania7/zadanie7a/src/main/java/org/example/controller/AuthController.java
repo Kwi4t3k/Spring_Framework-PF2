@@ -1,9 +1,9 @@
 package org.example.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.dto.LoginRequest;
 import org.example.dto.LoginResponse;
 import org.example.security.JwtUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,8 +27,7 @@ public class AuthController {
         Authentication auth;
         try {
             auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getLogin(),
-                            loginRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

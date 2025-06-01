@@ -5,9 +5,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -16,7 +20,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Vehicle {
     @Id
     @Column(nullable = false, unique = true)
@@ -28,13 +31,14 @@ public class Vehicle {
     private String model;
     private int year;
     private String plate;
-    @Column(columnDefinition = "BOOLEAN")
+    @Column(name = "is_active")
+    @Builder.Default
     private boolean isActive = true;
 
     @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
     @Builder.Default
-    private Map<String, Object> attributes = Map.of();
+    private Map<String, Object> attributes = new HashMap<>();
 
     public Object getAttribute(String key) {
         return attributes.get(key);
