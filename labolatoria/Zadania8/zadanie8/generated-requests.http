@@ -1,106 +1,109 @@
-##vehicle
-#
-##pojazdy
-#GET http://localhost:8080/api/vehicles/all
-#Authorization: Bearer {{auth_token}}
-#
-####
-#GET http://localhost:8080/api/vehicles/allActive
-#Authorization: Bearer {{auth_token}}
-#
-##wypożyczanie
-####
-#POST http://localhost:8080/api/vehicles
-#Authorization: Bearer {{auth_token}}
-#Content-Type: application/json
-#
-#{
-#  "category": "Car",
-#  "plate": "XYZ123",
-#  "brand": "Toyota",
-#  "model": "Corolla",
-#  "year": 2023,
-#  "price": 150.0,
-#  "attributes": {
-#    "seats": 5
-#  }
-#}
-#
-#
-####
-#DELETE http://localhost:8080/api/vehicles/5848428b-561a-4179-bc15-3a7888779993
-#Authorization: Bearer {{auth_token}}
-#
-## rental
-#
-####
-#GET http://localhost:8080/api/rentals
-#Authorization: Bearer {{auth_token}}
-#
-#
-####
-#POST http://localhost:8080/api/rentals/rent
-#Content-Type: application/json
-#Authorization: Bearer {{auth_token}}
-#
-#{
-#  "vehicleId": "1"
-#}
-#
-#
-####
-#POST http://localhost:8080/api/rentals/return
-#Content-Type: application/json
-#Authorization: Bearer {{auth_token}}
-#
-#{
-#  "vehicleId": "1"
-#}
-#
-####
-##auth
-#
-####
-#POST http://localhost:8080/api/auth/login
-#Content-Type: application/json
-#
-#{
-#    "login":"admin",
-#    "password":"admin"
-#}
-#
-#> {%
-#     client.global.set("auth_token", response.body.token);
-#%}
-#
-#<> 2025-06-04T134039.200.json
-#
-#
+### Variables
+@baseUrl = http://localhost:8080
+@contentType = application/json
+@adminId = fc6e600b-e89e-42e2-b2b7-ca18edb68924
+@grzesioId = 785b5d07-3afc-4928-8ec2-d7befc9ae958
+@user1Id = 02068dbc-e256-4174-acd8-7f2f6aa8102e
 
-
-#autentykacja
-
-###
-POST http://localhost:8080/api/auth/login
-Content-Type: application/json
-
-//{
-//    "login":"admin",
-//    "password":"admin"
-//}
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
 
 {
-    "login":"grzesio",
-    "password":"grzesio123"
+  "login": "admin",
+  "password": "admin"
 }
 
 > {%
-     client.global.set("auth_token", response.body.token);
+    client.global.set("auth_token", response.body.token);
 %}
 
 
-###
-#rental
+### Register
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
 
-GET http://localhost:8080/api/rentals/all
+{
+  "login": "",
+  "password": ""
+}
+
+### Get all rentals (ADMIN)
+GET {{baseUrl}}/api/rentals/all
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Get all active rentals (ADMIN)
+GET {{baseUrl}}/api/rentals/allActive
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Get my active rentals (USER, ADMIN)
+GET {{baseUrl}}/api/rentals/getRented
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Rent (USER, ADMIN)
+POST {{baseUrl}}/api/rentals/rent
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+{
+  "vehicleId": "1"
+}
+
+### Return (USER, ADMIN)
+POST {{baseUrl}}/api/rentals/return
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+{
+"vehicleId": "1"
+}
+
+### Get all users (ADMIN)
+GET {{baseUrl}}/api/users/allUsers
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Add role (ADMIN) nie działa
+POST {{baseUrl}}/api/users/{{user1Id}}/roles/add?
+    roleName=ADMIN
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Remove role (ADMIN) nie działa
+POST {{baseUrl}}/api/users/{{user1Id}}/roles/remove?
+    roleName=USER
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Get all vehicles (ADMIN)
+GET {{baseUrl}}/api/vehicles/all
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Get vehicle by id (ADMIN)
+GET {{baseUrl}}/api/vehicles/1
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Get available vehicles (USER, ADMIN)
+GET {{baseUrl}}/api/vehicles/allActive
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Get rented vehicles (USER, ADMIN) nie działa
+GET {{baseUrl}}/api/vehicles/allRented
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Get user roles (USER, ADMIN)
+GET {{baseUrl}}/api/users/checkRole
+Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Delete USER (ADMIN)
+DELETE {{baseUrl}}/api/users/delete/{{user1Id}}
+Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}

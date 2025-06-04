@@ -54,7 +54,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/checkRole")
+    @GetMapping("/checkRole")
     public String checkRole(@AuthenticationPrincipal UserDetails userDetails) {
         return "Rola " + userDetails.getUsername() + ": " + userDetails.getAuthorities().toString();
     }
