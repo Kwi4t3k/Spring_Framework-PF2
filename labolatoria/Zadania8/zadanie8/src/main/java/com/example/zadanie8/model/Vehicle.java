@@ -24,13 +24,20 @@ public class Vehicle {
     @Id
     @Column(nullable = false, unique = true)
     private String id;
+
     @Column(columnDefinition = "NUMERIC")
     private double price;
+
     private String category;
+
     private String brand;
+
     private String model;
+
     private int year;
+
     private String plate;
+
     @Column(name = "is_active")
     @Builder.Default
     private boolean isActive = true;

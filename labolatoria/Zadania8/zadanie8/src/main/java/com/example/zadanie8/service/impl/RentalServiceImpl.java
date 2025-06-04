@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -81,5 +82,15 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public List<Rental> findAll() {
         return rentalRepository.findAll();
+    }
+
+    @Override
+    public List<Rental> findActiveRentalByUserId(String userId) {
+        return findByUserId(userId).stream().filter(r -> r.getReturnDate() == null).toList();
+    }
+
+    @Override
+    public List<Rental> findByUserId(String userId) {
+        return rentalRepository.findAll().stream().filter(r -> r.getUser().getId().equals(userId)).toList();
     }
 }

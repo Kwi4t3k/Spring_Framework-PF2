@@ -18,10 +18,11 @@ public class Role {
      @Id
      @Column(nullable = false, unique = true)
      private String id;
+
      @Column(nullable = false, unique = true)
      private String name;
+
      @ManyToMany(mappedBy = "roles")
      @JsonIgnore
-     // odwrotna strona relacji:
      private Set<User> users;
 }

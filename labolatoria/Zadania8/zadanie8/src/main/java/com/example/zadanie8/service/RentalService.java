@@ -16,4 +16,8 @@ public interface RentalService {
     Rental returnRental(String vehicleId, String userId);
 
     List<Rental> findAll();
+
+    List<Rental> findActiveRentalByUserId(String id);
+
+    List<Rental> findByUserId(String userId);
 }

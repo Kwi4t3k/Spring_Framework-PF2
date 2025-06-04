@@ -1,0 +1,110 @@
+##vehicle
+#
+##pojazdy
+#GET http://localhost:8080/api/vehicles/all
+#Authorization: Bearer {{auth_token}}
+#
+####
+#GET http://localhost:8080/api/vehicles/allActive
+#Authorization: Bearer {{auth_token}}
+#
+##wypożyczanie
+####
+#POST http://localhost:8080/api/vehicles
+#Authorization: Bearer {{auth_token}}
+#Content-Type: application/json
+#
+#{
+#  "category": "Car",
+#  "plate": "XYZ123",
+#  "brand": "Toyota",
+#  "model": "Corolla",
+#  "year": 2023,
+#  "price": 150.0,
+#  "attributes": {
+#    "seats": 5
+#  }
+#}
+#
+#
+####
+#DELETE http://localhost:8080/api/vehicles/5848428b-561a-4179-bc15-3a7888779993
+#Authorization: Bearer {{auth_token}}
+#
+## rental
+#
+####
+#GET http://localhost:8080/api/rentals
+#Authorization: Bearer {{auth_token}}
+#
+#
+####
+#POST http://localhost:8080/api/rentals/rent
+#Content-Type: application/json
+#Authorization: Bearer {{auth_token}}
+#
+#{
+#  "vehicleId": "1"
+#}
+#
+#
+####
+#POST http://localhost:8080/api/rentals/return
+#Content-Type: application/json
+#Authorization: Bearer {{auth_token}}
+#
+#{
+#  "vehicleId": "1"
+#}
+#
+####
+##auth
+#
+####
+#POST http://localhost:8080/api/auth/login
+#Content-Type: application/json
+#
+#{
+#    "login":"admin",
+#    "password":"admin"
+#}
+#
+#> {%
+#     client.global.set("auth_token", response.body.token);
+#%}
+#
+#<> 2025-06-04T134039.200.json
+#
+#
+
+
+#autentykacja
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+//{
+//    "login":"admin",
+//    "password":"admin"
+//}
+
+{
+    "login":"grzesio",
+    "password":"grzesio123"
+}
+
+> {%
+     client.global.set("auth_token", response.body.token);
+%}
+
+<> 2025-06-04T142138.200.json
+<> 2025-06-04T142053.200.json
+
+###
+#rental
+
+GET http://localhost:8080/api/rentals/all
+Authorization: Bearer {{auth_token}}
+
+<> 2025-06-04T142057.200.json

@@ -1,6 +1,5 @@
 package com.example.zadanie8.controller;
 
-import com.example.zadanie8.dto.LoginRequest;
 import com.example.zadanie8.dto.LoginResponse;
 import com.example.zadanie8.dto.UserRequest;
 import com.example.zadanie8.security.JwtUtil;

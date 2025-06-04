@@ -40,32 +40,53 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(String id) {
-
+    public void deleteById(String userId) {
+        Optional<User> user = userRepository.findByIdAndIsActiveTrue(userId);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found: " + userId);
+        } else {
+            user.get().setActive(false);
+            user.get().getRoles().clear();
+            userRepository.save(user.get());
+        }
     }
 
     @Override
     public List<User> findAll() {
-        return List.of();
+        return userRepository.findAll();
     }
 
     @Override
-    public Optional<User> findById(String id) {
-        return Optional.empty();
+    public Optional<User> findById(String userId) {
+        return userRepository.findByIdAndIsActiveTrue(userId);
     }
 
     @Override
     public Optional<User> findByLogin(String login) {
-        return userRepository.findByLogin(login);
+        return userRepository.findByIdAndIsActiveTrue(login);
     }
 
     @Override
     public void addRoleToUser(String userId, String roleName) {
+        Optional<User> user = userRepository.findByIdAndIsActiveTrue(userId);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found: " + userId);
+        }
 
+        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new IllegalStateException("Role not found: " + roleName));
+        user.get().getRoles().add(role);
+        userRepository.save(user.get());
     }
 
     @Override
     public void removeRoleFromUser(String userId, String roleName) {
+        Optional<User> user = userRepository.findByIdAndIsActiveTrue(userId);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found: " + userId);
+        }
 
+        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new IllegalStateException("Role not found: " + roleName));
+        user.get().getRoles().remove(role);
+        userRepository.save(user.get());
     }
 }

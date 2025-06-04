@@ -51,18 +51,16 @@ public class VehicleServiceImpl implements VehicleService {
         return savedVehicle;
     }
 
-    @Override
-    public List<Vehicle> findAvailableVehicles() {
-        return vehicleRepository.findByIsActiveTrueAndIdNotIn(rentalRepository.findRentedVehicleIds());
-    }
+//    @Override
+//    public List<Vehicle> findAvailableVehicles() {
+//        return vehicleRepository.findByIsActiveTrueAndIdNotIn(rentalRepository.findRentedVehicleIds());
+//    }
 
     @Override
     public List<Vehicle> findRentedVehicles() {
         List<Vehicle> activeVehicles = findAllActive();
         Set<String> rentedIds = rentalRepository.findRentedVehicleIds();
-        return activeVehicles.stream()
-                .filter(vehicle -> rentedIds.contains(vehicle.getId()))
-                .toList();
+        return activeVehicles.stream().filter(vehicle -> rentedIds.contains(vehicle.getId())).toList();
     }
 
     @Override

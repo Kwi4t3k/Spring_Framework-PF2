@@ -25,6 +25,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "is_active")
+    @Builder.Default
+    private boolean isActive = true;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
      name = "user_roles",
