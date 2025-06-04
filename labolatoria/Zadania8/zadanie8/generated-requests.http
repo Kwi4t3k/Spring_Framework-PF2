@@ -18,6 +18,8 @@ Content-Type: {{contentType}}
     client.global.set("auth_token", response.body.token);
 %}
 
+<> 2025-06-04T200250.200.json
+
 
 ### Register
 POST {{baseUrl}}/api/auth/register
@@ -33,15 +35,21 @@ GET {{baseUrl}}/api/rentals/all
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
+<> 2025-06-04T200257.200.json
+
 ### Get all active rentals (ADMIN)
 GET {{baseUrl}}/api/rentals/allActive
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
+<> 2025-06-04T200300.200.json
+
 ### Get my active rentals (USER, ADMIN)
 GET {{baseUrl}}/api/rentals/getRented
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
+
+<> 2025-06-04T200301.200.json
 
 ### Rent (USER, ADMIN)
 POST {{baseUrl}}/api/rentals/rent
@@ -52,6 +60,8 @@ Authorization: Bearer {{auth_token}}
   "vehicleId": "1"
 }
 
+<> 2025-06-04T200303.201.json
+
 ### Return (USER, ADMIN)
 POST {{baseUrl}}/api/rentals/return
 Content-Type: {{contentType}}
@@ -61,22 +71,31 @@ Authorization: Bearer {{auth_token}}
 "vehicleId": "1"
 }
 
+<> 2025-06-04T200305.201.json
+
 ### Get all users (ADMIN)
 GET {{baseUrl}}/api/users/allUsers
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
-### Add role (ADMIN) nie działa
+<> 2025-06-04T200309.200.json
+
+### Add role (ADMIN)
 POST {{baseUrl}}/api/users/{{user1Id}}/roles/add?
-    roleName=ADMIN
+    roleName=ROLE_ADMIN
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
-### Remove role (ADMIN) nie działa
+<> 2025-06-04T200831.200.txt
+
+### Remove role (ADMIN)
 POST {{baseUrl}}/api/users/{{user1Id}}/roles/remove?
-    roleName=USER
+    roleName=ROLE_ADMIN
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
+
+<> 2025-06-04T200941.200.txt
+<> 2025-06-04T200926.200.txt
 
 ### Get all vehicles (ADMIN)
 GET {{baseUrl}}/api/vehicles/all
