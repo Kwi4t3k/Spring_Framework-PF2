@@ -57,14 +57,6 @@ public class VehicleController {
                 });
     }
 
-    @GetMapping("/allRented")
-    public List<Vehicle> getAllRentedVehicles(@AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        User user = userService.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        List<Rental> rentals = rentalService.findActiveRentalByUserId(user.getId());
-        return rentals.stream().map(Rental::getVehicle).toList();
-    }
-
     @PostMapping
     public ResponseEntity<Vehicle> addVehicle(@RequestBody Vehicle vehicle) {
         try {
