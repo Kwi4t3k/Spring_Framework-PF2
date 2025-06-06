@@ -1,0 +1,3 @@
+Instrukcje
+Dodanie płatności do projektu wypożyczalni
+Napisanie metody do obliczania aktualnej ceny za wypożyczenie
