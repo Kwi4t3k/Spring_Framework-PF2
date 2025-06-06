@@ -1,3 +1,20 @@
 Instrukcje
 Dodanie płatności do projektu wypożyczalni
 Napisanie metody do obliczania aktualnej ceny za wypożyczenie
+
+
+
+
+
+Klucz dla webhook uzyskamy po zalogowaniu (wpisujemy w konsoli)
+
+.\stripe.exe login
+
+A następnie uruchamiamy nasłuchiwanie zdarzeń i przekazywanie do
+endpointu aplikacji:
+
+.\stripe.exe listen --forward-to localhost:8080/api/payments/webhook
+
+
+Dodajemy klucz do zmiennych środowiskowych – WEBHOOK_SECRET
+Przy każdym uruchomieniu nasłuchiwania zmienia się klucz!

@@ -32,4 +32,7 @@ public class Rental {
 
     @Column(name = "return_date")
     private LocalDateTime returnDate;
+
+    @OneToOne(mappedBy = "rental")
+    private Payment payment;
 }

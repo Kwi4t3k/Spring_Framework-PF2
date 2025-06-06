@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "payment")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "rental")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -1,4 +1,6 @@
 package com.example.zadanie9.model;
 
-public class PaymentStatus {
+public enum PaymentStatus {
+    PENDING,
+    PAID,
 }
