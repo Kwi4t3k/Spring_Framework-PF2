@@ -4,6 +4,7 @@
 @adminId = fc6e600b-e89e-42e2-b2b7-ca18edb68924
 @grzesioId = 785b5d07-3afc-4928-8ec2-d7befc9ae958
 @user1Id = 02068dbc-e256-4174-acd8-7f2f6aa8102e
+@userId = ed09ac11-14fa-44c5-8547-f2ab41895ab9
 
 ### Login
 POST {{baseUrl}}/api/auth/login
@@ -13,6 +14,11 @@ Content-Type: {{contentType}}
   "login": "admin",
   "password": "admin"
 }
+
+#{
+#  "login": "user",
+#  "password": "user"
+#}
 
 > {%
     client.global.set("auth_token", response.body.token);
@@ -24,8 +30,8 @@ POST {{baseUrl}}/api/auth/register
 Content-Type: {{contentType}}
 
 {
-  "login": "",
-  "password": ""
+  "login": "user",
+  "password": "user"
 }
 
 ### Get all rentals (ADMIN)
@@ -49,7 +55,7 @@ Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
 {
-  "vehicleId": "1"
+  "vehicleId": "123"
 }
 
 ### Return (USER, ADMIN)
@@ -67,13 +73,13 @@ Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
 ### Add role (ADMIN)
-POST {{baseUrl}}/api/users/{{user1Id}}/roles/add?
+POST {{baseUrl}}/api/users/{{userId}}/roles/add?
     roleName=ROLE_ADMIN
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
 ### Remove role (ADMIN)
-POST {{baseUrl}}/api/users/{{user1Id}}/roles/remove?
+POST {{baseUrl}}/api/users/{{userId}}/roles/remove?
     roleName=ROLE_ADMIN
 Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
@@ -91,7 +97,7 @@ Authorization: Bearer {{auth_token}}
 ### Get available vehicles (USER, ADMIN)
 GET {{baseUrl}}/api/vehicles/allActive
 Content-Type: {{contentType}}
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbIlJPTEVfVVNFUiJdLCJzdWIiOiJ1c2VyIiwiaWF0IjoxNzQ5MzEzOTUwLCJleHAiOjE3NDkzMTc1NTB9.seDMQ82lfseo_TOMpxhNgWZ-0jMtCVwM3dFvEPNZh5M
 
 ### Get user roles (USER, ADMIN)
 GET {{baseUrl}}/api/users/checkRole
@@ -99,6 +105,27 @@ Content-Type: {{contentType}}
 Authorization: Bearer {{auth_token}}
 
 ### Delete USER (ADMIN)
-DELETE {{baseUrl}}/api/users/delete/{{user1Id}}
+DELETE {{baseUrl}}/api/users/delete/{{userId}}
 Content-Type: {{contentType}}
+Authorization: Bearer {{auth_token}}
+
+### Add Car USER (ADMIN)
+POST http://localhost:8080/api/vehicles
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "id": "123",
+  "price": 100,
+  "category": "Car",
+  "brand": "abc",
+  "model": "abc",
+  "year": 1000,
+  "plate": "abc123",
+  "attributes": {}
+}
+
+### checkout (USER, ADMIN)
+POST http://localhost:8080/api/payments/checkout/8b29641d-1361-425a-b6b5-e6ba0318211d
+Content-Type: application/x-www-form-urlencoded
 Authorization: Bearer {{auth_token}}
