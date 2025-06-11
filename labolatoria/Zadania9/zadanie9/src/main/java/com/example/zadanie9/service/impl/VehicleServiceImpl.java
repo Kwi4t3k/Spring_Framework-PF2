@@ -43,7 +43,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     @Transactional
     public Vehicle save(Vehicle vehicle) {
-        if(vehicle.getId() == null || vehicle.getId().isBlank()) {
+        if (vehicle.getId() == null || vehicle.getId().isBlank()) {
             vehicle.setId(UUID.randomUUID().toString());
             vehicle.setActive(true);
         }
@@ -51,10 +51,16 @@ public class VehicleServiceImpl implements VehicleService {
         return savedVehicle;
     }
 
-//    @Override
-//    public List<Vehicle> findAvailableVehicles() {
-//        return vehicleRepository.findByIsActiveTrueAndIdNotIn(rentalRepository.findRentedVehicleIds());
-//    }
+    @Override
+    public List<Vehicle> findAvailableVehicles() {
+        Set<String> rentedIds = rentalRepository.findRentedVehicleIds();
+
+        if (rentedIds.isEmpty()) {
+            return vehicleRepository.findByIsActiveTrue();
+        }
+
+        return vehicleRepository.findByIsActiveTrueAndIdNotIn(rentedIds);
+    }
 
     @Override
     public List<Vehicle> findRentedVehicles() {
@@ -72,11 +78,11 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public void deleteById(String id) {
-        if(rentalRepository.existsByVehicleIdAndReturnDateIsNull(id)) {
+        if (rentalRepository.existsByVehicleIdAndReturnDateIsNull(id)) {
             throw new IllegalStateException("Vehicle " + id + " is rented.");
         }
         Optional<Vehicle> vehicle = vehicleRepository.findByIdAndIsActiveTrue(id);
-        if(vehicle.isEmpty()) {
+        if (vehicle.isEmpty()) {
             throw new IllegalStateException("Vehicle " + id + " not found.");
         } else {
             vehicle.get().setActive(false);

@@ -38,6 +38,21 @@ public class VehicleController {
         return vehicleService.findAllActive();
     }
 
+    @GetMapping("/available")
+    public List<Vehicle> getAvailableVehicles() {
+        return vehicleService.findAvailableVehicles();
+    }
+
+    @GetMapping("/rented")
+    public List<Vehicle> getRentedVehicles() {
+        return vehicleService.findRentedVehicles();
+    }
+
+    @GetMapping("/available/{id}")
+    public boolean isAvailable(@PathVariable String id) {
+        return vehicleService.isAvailable(id);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Vehicle> getVehicleById(@PathVariable String id) {
         logger.info("Request received for vehicle with ID: {}", id);

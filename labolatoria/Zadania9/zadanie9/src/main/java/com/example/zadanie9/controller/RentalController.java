@@ -44,6 +44,20 @@ public class RentalController {
         return rentalService.findActiveRentalByUserId(user.getId());
     }
 
+    @GetMapping("/isRented/{vehicleId}")
+    public ResponseEntity<Boolean> isVehicleRented(@PathVariable String vehicleId) {
+        boolean rented = rentalService.isVehicleRented(vehicleId);
+        return ResponseEntity.ok(rented);
+    }
+
+    @GetMapping("/active/{vehicleId}")
+    public ResponseEntity<Rental> getActiveRentalByVehicle(@PathVariable String vehicleId) {
+        return rentalService
+                .findActiveRentalByVehicleId(vehicleId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/rent")
     public ResponseEntity<Rental> rentVehicle(@RequestBody RentalRequest rentalRequest, @AuthenticationPrincipal UserDetails userDetails) {
         String login = userDetails.getUsername();

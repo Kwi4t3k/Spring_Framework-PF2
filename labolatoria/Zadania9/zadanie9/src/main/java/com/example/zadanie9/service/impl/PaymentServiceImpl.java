@@ -48,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
                         .setName("Rental " + rentalId)
                         .build();
 
-        var amount = calculateRentalPrice(rental);
+        var amount = calculatePrice(rental);
 
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
@@ -119,13 +119,16 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    private double calculateRentalPrice(Rental rental) {
+    private double calculatePrice(Rental rental) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime rentDateTime = rental.getRentDate();
-        long diff = ChronoUnit.DAYS.between(rentDateTime, now);
-        if (diff <= 0) {
-            diff = 1;
+
+        long difference = ChronoUnit.DAYS.between(rentDateTime, now);
+
+        if (difference <= 0) { // jak mniej niż 24h to 1 doba
+            difference = 1;
         }
-        return (rental.getVehicle().getPrice() * diff) * 100;
+
+        return (rental.getVehicle().getPrice() * difference) * 100; // cena za dobę * liczba dób * 100 | * 100 żeby było w groszach
     }
 }

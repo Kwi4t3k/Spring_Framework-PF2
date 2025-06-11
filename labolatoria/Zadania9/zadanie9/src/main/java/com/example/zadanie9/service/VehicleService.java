@@ -14,7 +14,7 @@ public interface VehicleService {
 
     Vehicle save(Vehicle vehicle);
 
-//    List<Vehicle> findAvailableVehicles();
+    List<Vehicle> findAvailableVehicles();
 
     List<Vehicle> findRentedVehicles();
 
