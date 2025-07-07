@@ -37,7 +37,7 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public Rental rent(String bookId, String userId) {
-        if(rentalRepository.findByBookIdAndReturnDateIsNull(bookId).isPresent()) {
+        if (rentalRepository.findByBookIdAndReturnDateIsNull(bookId).isPresent()) {
             throw new IllegalStateException("Book " + bookId + " is not available for rent.");
         }
 

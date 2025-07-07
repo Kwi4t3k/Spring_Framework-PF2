@@ -22,8 +22,8 @@ import java.util.Map;
 @Builder
 public class Book {
     @Id
-    @Column(name = "book_id", nullable = false, unique = true)
-    private String bookId;
+    @Column(nullable = false, unique = true)
+    private String id;
 
     private String title;
 

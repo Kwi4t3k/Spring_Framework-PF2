@@ -13,10 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +37,7 @@ public class UserServiceImpl implements UserService {
                 .id(UUID.randomUUID().toString())
                 .login(req.getLogin())
                 .password(passwordEncoder.encode(req.getPassword()))
+                .roles(new HashSet<>())
                 .build();
 
         u.getRoles().add(userRole);
@@ -60,6 +58,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public void addRoleToUser(String userId, String roleName) {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
@@ -67,5 +70,31 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
         u.getRoles().add(r);
         userRepository.save(u);
+    }
+
+    @Override
+    public void removeRoleFromUser(String userId, String roleName) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found: " + userId);
+        }
+
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
+
+        user.get().getRoles().remove(role);
+        userRepository.save(user.get());
+    }
+
+    @Override
+    public void deleteById(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found: " + userId);
+        } else {
+            user.get().setActive(false);
+            user.get().getRoles().clear();
+            userRepository.save(user.get());
+        }
     }
 }

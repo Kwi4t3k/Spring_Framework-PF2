@@ -100,19 +100,19 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("Invalid signature", e);
         }
 
-        if("checkout.session.completed".equals(event.getType())) {
+        if ("checkout.session.completed".equals(event.getType())) {
             StripeObject stripeObject =
                     event.getDataObjectDeserializer().getObject().orElseThrow();
-            String sessionId = ((Session)stripeObject).getId();
+            String sessionId = ((Session) stripeObject).getId();
 
-            if(sessionId != null) {
+            if (sessionId != null) {
                 paymentRepository.findByStripeSessionId(sessionId).ifPresent(payment -> {
                     payment.setStatus(PaymentStatus.PAID);
                     payment.setPaidAt(LocalDateTime.now());
                     paymentRepository.save(payment);
                     Rental rental = payment.getRental();
                     System.out.println("Returning rental: " + rental.getId());
-                    rentalService.returnRental(rental.getBook().getBookId(), rental.getUser().getId());
+                    rentalService.returnRental(rental.getBook().getId(), rental.getUser().getId());
                     System.out.println("Returned rental: " + rental.getId() + ", time: " + rental.getReturnDate());
                 });
             }

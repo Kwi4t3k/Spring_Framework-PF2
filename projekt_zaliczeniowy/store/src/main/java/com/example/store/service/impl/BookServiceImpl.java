@@ -42,8 +42,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book book) {
-        if (book.getBookId() == null || book.getBookId().isEmpty()) {
-            book.setBookId(UUID.randomUUID().toString());
+        if (book.getId() == null || book.getId().isEmpty()) {
+            book.setId(UUID.randomUUID().toString());
             book.setActive(true);
         }
         return bookRepository.save(book);

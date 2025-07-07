@@ -18,8 +18,8 @@ import java.util.UUID;
 @Builder
 public class Cart {
     @Id
-    @GeneratedValue
-    private UUID id;
+    @Column(nullable = false, unique = true)
+    private String id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)

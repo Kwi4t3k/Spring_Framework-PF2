@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "cart_items")
 @Data
@@ -16,8 +14,7 @@ import java.util.UUID;
 @Builder
 public class CartItem {
     @Id
-    @GeneratedValue
-    private UUID id;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)

@@ -33,6 +33,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new IllegalArgumentException("Book with ID: " + bookId + " not found"));
 
         CartItem cartItem = CartItem.builder()
+                .id(UUID.randomUUID().toString())
                 .cart(cart)
                 .book(book)
                 .quantity(quantity)

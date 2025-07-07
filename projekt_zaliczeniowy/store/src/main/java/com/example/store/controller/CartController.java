@@ -1,18 +1,37 @@
 package com.example.store.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.store.model.Cart;
+import com.example.store.service.CartService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/cart")
+@RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
-    private final UserRepository userRepository;
 
-    @Autowired
-    public CartController(CartService cartService, UserRepository userRepository) {
-        this.cartService = cartService;
-        this.userRepository = userRepository;
+    @GetMapping("/view")
+    public Cart viewCart(@AuthenticationPrincipal UserDetails userDetails) {
+        return cartService.getCart(userDetails.getUsername());
+    }
+
+    @PostMapping("/add")
+    public void addItem(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String bookId, @RequestParam int quantity) {
+        cartService.addToCart(userDetails.getUsername(), bookId, quantity);
+    }
+
+    @DeleteMapping("/delete/{itemId}")
+    public void deleteItem(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID itemId) {
+        cartService.removeFromCart(userDetails.getUsername(), itemId);
+    }
+
+    @DeleteMapping("/clear")
+    public void clearCart(@AuthenticationPrincipal UserDetails userDetails) {
+        cartService.clearCart(userDetails.getUsername());
     }
 }
