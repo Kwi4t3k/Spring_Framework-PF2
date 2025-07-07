@@ -3,6 +3,7 @@ package com.example.store.service.impl;
 import com.example.store.model.Book;
 import com.example.store.repository.BookRepository;
 import com.example.store.service.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +13,10 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
-
-    public BookServiceImpl(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public List<Book> findAll() {

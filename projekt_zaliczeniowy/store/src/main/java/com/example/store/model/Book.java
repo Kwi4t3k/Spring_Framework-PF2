@@ -15,14 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@Table(name = "book")
+@Table(name = "books")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Book {
     @Id
-    @Column(nullable = false, unique = true)
+    @Column(name = "book_id", nullable = false, unique = true)
     private String bookId;
 
     private String title;
