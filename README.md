@@ -19,5 +19,10 @@
   - [Zadanie 6](labolatoria/Zadania6/zadanie6a)
 - **Zadania 7**
   - [Zadanie 7](labolatoria/Zadania7/zadanie7a)
+- **Zadania 8**
+  - [Zadanie 8](labolatoria/Zadania8/zadanie8)
+- **Zadania 9**
+  - [Zadanie 9](labolatoria/Zadania9/zadanie9)
     
-# Projekt
+# Projekt - Book Store
+[Projekt zaliczeniowy - pliki](projekt_zaliczeniowy/store/src/main/java/com/example/store)
