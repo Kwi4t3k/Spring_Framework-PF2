@@ -1,6 +1,7 @@
 package com.example.store.service.impl;
 
 import com.example.store.dto.UserRequest;
+import com.example.store.model.Cart;
 import com.example.store.model.Role;
 import com.example.store.model.User;
 import com.example.store.repository.CartRepository;
@@ -27,20 +28,29 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void register(UserRequest req) {
+    public User register(UserRequest req) {
         if (userRepository.findByLogin(req.getLogin()).isPresent()) {
             throw new IllegalArgumentException("Error...");
         }
+
         Role userRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() ->
-                        new IllegalStateException("There is no role... ROLE_USER"));
+                .orElseThrow(() -> new IllegalStateException("Role not found"));
+
         User u = User.builder()
                 .id(UUID.randomUUID().toString())
                 .login(req.getLogin())
                 .password(passwordEncoder.encode(req.getPassword()))
-                .roles(Set.of(userRole))
                 .build();
-        userRepository.save(u);
+
+        u.getRoles().add(userRole);
+        User savedUser = userRepository.save(u);
+
+        Cart cart = Cart.builder()
+                .user(savedUser)
+                .build();
+
+        cartRepository.save(cart);
+        return savedUser;
     }
 
     @Override
@@ -53,7 +63,7 @@ public class UserServiceImpl implements UserService {
     public void addRoleToUser(String userId, String roleName) {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
-        Role r = userRepository.findByName(roleName)
+        Role r = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
         u.getRoles().add(r);
         userRepository.save(u);

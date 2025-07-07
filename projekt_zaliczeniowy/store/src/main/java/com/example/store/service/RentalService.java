@@ -10,4 +10,6 @@ public interface RentalService {
     Rental rent(String bookId, String userId);
 
     Rental returnRental(String bookId, String userId);
+
+    List<Rental> findByUserId(String userId);
 }

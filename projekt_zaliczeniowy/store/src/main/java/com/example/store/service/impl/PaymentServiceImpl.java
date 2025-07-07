@@ -1,12 +1,12 @@
 package com.example.store.service.impl;
 
-import com.example.zadanie9.model.Payment;
-import com.example.zadanie9.model.PaymentStatus;
-import com.example.zadanie9.model.Rental;
-import com.example.zadanie9.repository.PaymentRepository;
-import com.example.zadanie9.repository.RentalRepository;
-import com.example.zadanie9.service.PaymentService;
-import com.example.zadanie9.service.RentalService;
+import com.example.store.model.Payment;
+import com.example.store.model.PaymentStatus;
+import com.example.store.model.Rental;
+import com.example.store.repository.PaymentRepository;
+import com.example.store.repository.RentalRepository;
+import com.example.store.service.PaymentService;
+import com.example.store.service.RentalService;
 import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
@@ -14,10 +14,10 @@ import com.stripe.model.StripeObject;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -112,7 +112,7 @@ public class PaymentServiceImpl implements PaymentService {
                     paymentRepository.save(payment);
                     Rental rental = payment.getRental();
                     System.out.println("Returning rental: " + rental.getId());
-                    rentalService.returnRental(rental.getVehicle().getId(), rental.getUser().getId());
+                    rentalService.returnRental(rental.getBook().getBookId(), rental.getUser().getId());
                     System.out.println("Returned rental: " + rental.getId() + ", time: " + rental.getReturnDate());
                 });
             }
@@ -129,6 +129,6 @@ public class PaymentServiceImpl implements PaymentService {
             difference = 1;
         }
 
-        return (rental.getVehicle().getPrice() * difference) * 100; // cena za dobę * liczba dób * 100 | * 100 żeby było w groszach
+        return (rental.getBook().getPrice() * difference) * 100; // cena za dobę * liczba dób * 100 | * 100 żeby było w groszach
     }
 }

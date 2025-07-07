@@ -1,5 +1,6 @@
 package com.example.store.controller;
 
+import com.example.store.dto.LoginRequest;
 import com.example.store.dto.LoginResponse;
 import com.example.store.dto.UserRequest;
 import com.example.store.security.JwtUtil;
@@ -26,34 +27,30 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody UserRequest userRequest) {
-        Authentication auth;
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         try {
-            auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userRequest.getLogin(), userRequest.getPassword())
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword())
             );
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            String token = jwtUtil.generateToken(userDetails);
+            return ResponseEntity.ok(new LoginResponse(token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String token = jwtUtil.generateToken(userDetails);
-
-        LoginResponse responseBody = new LoginResponse(token);
-        return ResponseEntity.ok(responseBody);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRequest req) {
-         try {
-             userService.register(req);
-             return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body("Registered successfully");
-         } catch (IllegalArgumentException ex) {
-             return ResponseEntity
-                .badRequest()
-                .body(ex.getMessage());
-         }
+    public ResponseEntity<?> register(@RequestBody UserRequest userRequest) {
+        try {
+            userService.register(userRequest);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Registered successfully");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(ex.getMessage());
+        }
     }
 }
