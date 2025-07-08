@@ -1,8 +1,108 @@
+### Variables
+@baseUrl = http://localhost:8080
+@contentType = application/json
+@adminId = 8d77f322-3161-4994-8b12-2d2e0584a7f4
+@annaId = 9cf6cb17-7038-4c93-946f-23c77ceaa068
+
 ### Register
 POST http://localhost:8080/api/auth/register
-Content-Type: application/json
+Content-Type: {{contentType}}
 
 {
-  "login": "admin",
-  "password": "admin"
+  "login": "anna",
+  "password": "anna"
 }
+
+### Login
+POST http://localhost:8080/api/auth/login
+Content-Type: {{contentType}}
+
+#{
+#  "login": "admin",
+#  "password": "admin"
+#}
+
+{
+  "login": "anna",
+  "password": "anna"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Check role
+GET http://localhost:8080/api/users/checkRole
+Authorization: Bearer {{auth_token}}
+
+### Show all users (ADMIN)
+GET http://localhost:8080/api/users/allUsers
+Authorization: Bearer {{auth_token}}
+
+### Delete user (ADMIN)
+DELETE http://localhost:8080/api/users/delete/{{annaId}}
+Authorization: Bearer {{auth_token}}
+
+### Unban user (ADMIN)
+POST http://localhost:8080/api/users/{{annaId}}/unban
+Authorization: Bearer {{auth_token}}
+
+### Add role (ADMIN)
+POST http://localhost:8080/api/users/{{annaId}}/roles/add?
+    roleName=ROLE_USER
+Authorization: Bearer {{auth_token}}
+
+### Remove role (ADMIN)
+POST {{baseUrl}}/api/users/{{annaId}}/roles/remove?
+    roleName=ROLE_USER
+Authorization: Bearer {{auth_token}}
+
+### Show all books
+GET http://localhost:8080/api/books/allBooks
+Authorization: Bearer {{auth_token}}
+
+### Show all available (active) books
+GET http://localhost:8080/api/books/allAvailableBooks
+Authorization: Bearer {{auth_token}}
+
+### Check if concrete book is available
+GET http://localhost:8080/api/books/isBookAvailable/0cd7f397-d4a2-40cc-9a98-4245657d6bfa
+Authorization: Bearer {{auth_token}}
+
+### List information about concrete book
+GET http://localhost:8080/api/books/findBookById/0cd7f397-d4a2-40cc-9a98-4245657d6bfa
+Authorization: Bearer {{auth_token}}
+
+### Add new book
+POST http://localhost:8080/api/books
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "id": "",
+  "title": "Adam Mickiewicz",
+  "author": "Pan Tadeusz",
+  "price": 100,
+  "isActive": true
+}
+
+### Delete book
+DELETE http://localhost:8080/api/books/af3a96d7-cf44-4cee-802f-e5b6da0676e3
+Authorization: Bearer {{auth_token}}
+
+### Viev my cart
+GET http://localhost:8080/api/cart/view
+Authorization: Bearer {{auth_token}}
+
+### Add item to my cart
+POST http://localhost:8080/api/cart/add?
+    bookId=0cd7f397-d4a2-40cc-9a98-4245657d6bfa
+Authorization: Bearer {{auth_token}}
+
+### Delete item from my cart
+DELETE http://localhost:8080/api/cart/delete/{{itemId}}
+Authorization: Bearer {{auth_token}}
+
+### Clear my cart
+DELETE http://localhost:8080/api/cart/clear
+Authorization: Bearer {{auth_token}}

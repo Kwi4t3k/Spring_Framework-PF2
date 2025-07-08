@@ -18,4 +18,6 @@ public interface UserService {
     Optional<User> findByLogin(String login);
 
     List<User> findAll();
+
+    void unban(String userId);
 }

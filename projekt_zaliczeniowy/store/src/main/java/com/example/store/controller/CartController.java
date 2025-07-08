@@ -7,8 +7,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
@@ -21,12 +19,12 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public void addItem(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String bookId, @RequestParam int quantity) {
-        cartService.addToCart(userDetails.getUsername(), bookId, quantity);
+    public void addItem(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String bookId) {
+        cartService.addToCart(userDetails.getUsername(), bookId);
     }
 
     @DeleteMapping("/delete/{itemId}")
-    public void deleteItem(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID itemId) {
+    public void deleteItem(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String itemId) {
         cartService.removeFromCart(userDetails.getUsername(), itemId);
     }
 

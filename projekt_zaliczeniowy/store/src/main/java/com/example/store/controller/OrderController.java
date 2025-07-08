@@ -1,6 +1,6 @@
 package com.example.store.controller;
 
-import com.example.store.service.PaymentService;
+import com.example.store.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor
-public class PaymentController {
-    private final PaymentService paymentService;
+public class OrderController {
+    private final OrderService paymentService;
 
     @PostMapping("/checkout/{rentalId}")
     public ResponseEntity<String> createCheckoutSession(@PathVariable String rentalId) {

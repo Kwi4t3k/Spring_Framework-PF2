@@ -1,5 +1,6 @@
 package com.example.store.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,13 +29,15 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-     name = "user_roles",
-     joinColumns = @JoinColumn(name = "user_id"),
-     inverseJoinColumns = @JoinColumn(name = "role_id")
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude @EqualsAndHashCode.Exclude
+    @JsonBackReference
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Cart cart;
 }

@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(UserRequest req) {
         if (userRepository.findByLogin(req.getLogin()).isPresent()) {
-            throw new IllegalArgumentException("Error...");
+            throw new IllegalArgumentException("User already exists");
         }
 
         Role userRole = roleRepository.findByName("ROLE_USER")
@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(u);
 
         Cart cart = Cart.builder()
+                .id(UUID.randomUUID().toString())
                 .user(savedUser)
                 .build();
 
@@ -60,6 +61,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public void unban(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User with ID: " + userId + " not found"));
+        user.setActive(true);
+        userRepository.save(user);
     }
 
     @Override

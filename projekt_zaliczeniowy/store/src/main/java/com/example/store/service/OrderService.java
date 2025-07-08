@@ -1,7 +1,7 @@
 package com.example.store.service;
 
-public interface PaymentService {
-    String createCheckoutSession(String rentalId);
+public interface OrderService {
+    String createCheckoutSession(String orderId);
 
     void handleWebhook(String payload, String signature);
 }

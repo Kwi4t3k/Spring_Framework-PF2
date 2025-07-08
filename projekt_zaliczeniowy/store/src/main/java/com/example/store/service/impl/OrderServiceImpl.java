@@ -1,12 +1,9 @@
 package com.example.store.service.impl;
 
-import com.example.store.model.Payment;
-import com.example.store.model.PaymentStatus;
-import com.example.store.model.Rental;
-import com.example.store.repository.PaymentRepository;
-import com.example.store.repository.RentalRepository;
-import com.example.store.service.PaymentService;
-import com.example.store.service.RentalService;
+import com.example.store.model.Order;
+import com.example.store.model.OrderStatus;
+import com.example.store.repository.OrderRepository;
+import com.example.store.service.OrderService;
 import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
@@ -20,15 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentServiceImpl implements PaymentService {
-    private final RentalService rentalService;
-    private final RentalRepository rentalRepository;
-    private final PaymentRepository paymentRepository;
+public class OrderServiceImpl implements OrderService {
+    private final OrderRepository orderRepository;
 
     @Value("${STRIPE_API_KEY}")
     private String apiKey;
@@ -37,18 +30,18 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public String createCheckoutSession(String rentalId) {
-        Rental rental = rentalRepository.findById(rentalId)
-                .orElseThrow(() -> new IllegalStateException("Rental not found with id: " + rentalId));
+    public String createCheckoutSession(String orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalStateException("Order with ID: " + orderId + " not found"));
 
         Stripe.apiKey = apiKey;
 
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                        .setName("Rental " + rentalId)
+                        .setName("Order " + orderId)
                         .build();
 
-        var amount = calculatePrice(rental);
+        var amount = calculatePrice(order);
 
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
@@ -66,23 +59,19 @@ public class PaymentServiceImpl implements PaymentService {
         SessionCreateParams params = SessionCreateParams.builder()
                 .addLineItem(lineItem)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .putMetadata("rentalId", rentalId)
+                .putMetadata("orderId", orderId)
                 .setSuccessUrl("http://localhost:8080/api/payments/success")
                 .setCancelUrl("http://localhost:8080/api/payments/cancel")
                 .build();
 
         try {
             Session session = Session.create(params);
-            Payment payment = Payment.builder()
-                    .id(UUID.randomUUID().toString())
-                    .amount(amount)
-                    .createdAt(LocalDateTime.now())
-                    .rental(rental)
-                    .stripeSessionId(session.getId())
-                    .status(PaymentStatus.PENDING)
-                    .build();
 
-            paymentRepository.save(payment);
+            order.setStripeSessionId(session.getId());
+            order.setStatus(OrderStatus.PENDING);
+            order.setCreatedAt(LocalDateTime.now());
+
+            orderRepository.save(order);
             return session.getUrl();
         } catch (Exception e) {
             throw new RuntimeException("Stripe session creation failed", e);
@@ -93,7 +82,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public void handleWebhook(String payload, String signature) {
         Stripe.apiKey = apiKey;
+
         Event event;
+
         try {
             event = Webhook.constructEvent(payload, signature, webhookSecret);
         } catch (SignatureVerificationException e) {
@@ -101,34 +92,45 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         if ("checkout.session.completed".equals(event.getType())) {
-            StripeObject stripeObject =
-                    event.getDataObjectDeserializer().getObject().orElseThrow();
+            StripeObject stripeObject = event.getDataObjectDeserializer().getObject().orElseThrow();
             String sessionId = ((Session) stripeObject).getId();
 
             if (sessionId != null) {
-                paymentRepository.findByStripeSessionId(sessionId).ifPresent(payment -> {
-                    payment.setStatus(PaymentStatus.PAID);
-                    payment.setPaidAt(LocalDateTime.now());
-                    paymentRepository.save(payment);
-                    Rental rental = payment.getRental();
-                    System.out.println("Returning rental: " + rental.getId());
-                    rentalService.returnRental(rental.getBook().getId(), rental.getUser().getId());
-                    System.out.println("Returned rental: " + rental.getId() + ", time: " + rental.getReturnDate());
+                orderRepository.findByStripeSessionId(sessionId).ifPresent(order -> {
+                    // PAID
+                    order.setStatus(OrderStatus.PAID);
+                    order.setPaidAt(LocalDateTime.now());
+                    orderRepository.save(order);
+
+                    // -> +30sec SHIPPED -> +15sec DELIVERED
+                    String orderId = order.getId();
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(30000);
+                            orderRepository.findById(orderId).ifPresent(o -> {
+                                o.setStatus(OrderStatus.SHIPPED);
+                                orderRepository.save(o);
+                            });
+
+                            Thread.sleep(15000);
+                            orderRepository.findById(orderId).ifPresent(o -> {
+                                o.setStatus(OrderStatus.DELIVERED);
+                                orderRepository.save(o);
+                            });
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }).start();
                 });
             }
         }
     }
 
-    private double calculatePrice(Rental rental) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime rentDateTime = rental.getRentDate();
+    private double calculatePrice(Order order) { // zmienić na Order (wszystkie itemki * 100 żeby w groszach)
+        double total = order.getItems().stream()
+                .mapToDouble(item -> item.getPrice() *  item.getQuantity())
+                .sum();
 
-        long difference = ChronoUnit.DAYS.between(rentDateTime, now);
-
-        if (difference <= 0) { // jak mniej niż 24h to 1 doba
-            difference = 1;
-        }
-
-        return (rental.getBook().getPrice() * difference) * 100; // cena za dobę * liczba dób * 100 | * 100 żeby było w groszach
+        return total * 100; // cena * 100 żeby było w groszach
     }
 }

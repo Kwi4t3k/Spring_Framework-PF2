@@ -54,9 +54,32 @@ public class UserController {
         }
     }
 
+    @PostMapping("/{userId}/unban")
+    public ResponseEntity<String> unbanUser(@PathVariable String userId) {
+        try {
+            if (userId == null || userId.isEmpty()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("User ID cannot be empty");
+            }
+
+            userService.unban(userId);
+            return ResponseEntity
+                    .ok("User " + userId + " has been unbanned");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Could not unban user: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/checkRole")
     public String checkRole(@AuthenticationPrincipal UserDetails userDetails) {
-        return "Rola " + userDetails.getUsername() + ": " + userDetails.getAuthorities().toString();
+        return "Rola użytkownika " + userDetails.getUsername() + ": " + userDetails.getAuthorities().toString();
     }
 
     @DeleteMapping("/delete/{userId}")
