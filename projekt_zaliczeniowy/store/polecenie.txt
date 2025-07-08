@@ -7,7 +7,7 @@ Własna apliakcja np:
 Projekt księgarni:
 1/4punktów. CRUD + Spring Security z podziałem na role : admin -dodaje i usuwa  ksiazki z ksiegarni, user możne przeglądać.
 1/4pkt punktów  CRUD + koszyk - dodawanie usuwanie książek przez Usera.
-1/4pkt punktów Zamówienia -  Dodanie funkcji które może wykonywać User - składanie zamówień na książki, zmiana statusu zamówienia przez admina.
+1/4pkt punktów Zamówienia -  Dodanie funkcji które może wykonywać User - składanie zamówień na książki, TODO zmiana statusu zamówienia przez admina.
 1/4pkt punktów  Płatności - podpięcie np. Stripe
 
 Lub analogiczny projekt.
@@ -19,3 +19,20 @@ Aplikacją zaliczeniową może być też rozbudowana wypożyczalnia pojazdów:
     4. Dodanie Lokalizacji pojazdów, sprawdzenie przed zwrotem/opłaceniem czy pojazd jest w siedzibie firmy lub innych dozwolonych miejscach (mockup trackera gps pojazdów:endpoint z ustawieniem "ręcznym" lokalizacji + scheduler z losowym ustawieniem) (5pkt)
     5. Zabezpieczenie endpointów do wyświetlania danych zalogowanego użytkownika (również wypożyczone/zwrócone pojazdy )(2pkt).
     6. Dodanie Swaggera(1)
+
+
+
+
+
+Klucz dla webhook uzyskamy po zalogowaniu (wpisujemy w konsoli)
+
+.\stripe.exe login
+
+A następnie uruchamiamy nasłuchiwanie zdarzeń i przekazywanie do
+endpointu aplikacji:
+
+.\stripe.exe listen --forward-to localhost:8080/api/orders/webhook
+
+
+Dodajemy klucz do zmiennych środowiskowych – WEBHOOK_SECRET
+Przy każdym uruchomieniu nasłuchiwania zmienia się klucz!

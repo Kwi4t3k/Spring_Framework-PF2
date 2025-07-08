@@ -41,17 +41,4 @@ public class Order {
 
     @Column(name = "paid_at")
     private LocalDateTime paidAt;
-
-
-//    /** Pomocnicza metoda do dodawania pozycji */
-//    public void addItem(OrderItem item) {
-//        items.add(item);
-//        item.setOrder(this);
-//    }
-//
-//    /** Pomocnicza metoda do usuwania pozycji */
-//    public void removeItem(OrderItem item) {
-//        items.remove(item);
-//        item.setOrder(null);
-//    }
 }

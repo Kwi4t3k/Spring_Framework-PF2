@@ -1,10 +1,9 @@
 package com.example.store.service.impl;
 
-import com.example.store.model.Book;
-import com.example.store.model.Order;
-import com.example.store.model.OrderStatus;
+import com.example.store.model.*;
 import com.example.store.repository.BookRepository;
 import com.example.store.repository.CartItemRepository;
+import com.example.store.repository.CartRepository;
 import com.example.store.repository.OrderRepository;
 import com.example.store.service.OrderService;
 import com.stripe.Stripe;
@@ -20,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final BookRepository bookRepository;
     private final CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
 
     @Value("${STRIPE_API_KEY}")
     private String apiKey;
@@ -65,8 +68,8 @@ public class OrderServiceImpl implements OrderService {
                 .addLineItem(lineItem)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .putMetadata("orderId", orderId)
-                .setSuccessUrl("http://localhost:8080/api/payments/success")
-                .setCancelUrl("http://localhost:8080/api/payments/cancel")
+                .setSuccessUrl("http://localhost:8080/api/orders/success")
+                .setCancelUrl("http://localhost:8080/api/orders/cancel")
                 .build();
 
         try {
@@ -113,6 +116,51 @@ public class OrderServiceImpl implements OrderService {
                 });
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public String placeOrder(String username) {
+        // 1. Pobierz koszyk
+        Cart cart = cartRepository.findByUserLogin(username)
+                .orElseThrow(() -> new IllegalArgumentException("Brak koszyka dla " + username));
+
+        // 2. Pobierz elementy koszyka już jako List<CartItem>
+        List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
+
+        // 3. Utwórz Order
+        Order order = Order.builder()
+                .id(UUID.randomUUID().toString())
+                .user(cart.getUser())
+                .status(OrderStatus.NEW)
+                .build();
+        order.setItems(new ArrayList<>());
+
+        // 4. Przenieś CartItem → OrderItem
+        cartItems.forEach(ci -> {
+            OrderItem orderItem = OrderItem.builder()
+                    .id(UUID.randomUUID().toString())
+                    .order(order)
+                    .book(ci.getBook())
+                    .quantity(1) // albo ci.getQuantity() jeśli trzymasz quantity
+                    .price(ci.getBook().getPrice())
+                    .build();
+            order.getItems().add(orderItem);
+        });
+
+        // 5. Oblicz sumę
+        double total = order.getItems().stream()
+                .mapToDouble(i -> i.getPrice() * i.getQuantity())
+                .sum();
+        order.setAmount(total);
+
+        order.setCreatedAt(LocalDateTime.now());
+
+        // 6. Zapisz order i wyczyść koszyk
+        orderRepository.save(order);
+        cartItemRepository.deleteAllByCartId(cart.getId());
+
+        return order.getId();
     }
 
     private void deactivateBooks(Order order) {

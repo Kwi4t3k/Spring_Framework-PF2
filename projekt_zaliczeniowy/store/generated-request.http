@@ -106,3 +106,11 @@ Authorization: Bearer {{auth_token}}
 ### Clear my cart
 DELETE http://localhost:8080/api/cart/clear
 Authorization: Bearer {{auth_token}}
+
+### Place order
+POST http://localhost:8080/api/orders/placeOrder
+Authorization: Bearer {{auth_token}}
+
+### Checkout
+POST http://localhost:8080/api/orders/checkout/27bf8844-1cae-495b-b46d-8f6d1b49fec0
+Authorization: Bearer {{auth_token}}
