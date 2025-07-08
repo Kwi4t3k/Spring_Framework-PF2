@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,6 +35,14 @@ public class CartServiceImpl implements CartService {
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Book with ID: " + bookId + " not found"));
+        if (!book.isActive()) {
+            throw new IllegalStateException("Book is not available");
+        }
+
+        boolean alreadyInCart = cartItemRepository.existsByCartIdAndBookId(cart.getId(), bookId);
+        if (alreadyInCart) {
+            throw new IllegalArgumentException("Book with ID: " + bookId + " is already in your cart");
+        }
 
         CartItem cartItem = CartItem.builder()
                 .id(UUID.randomUUID().toString())
@@ -50,13 +60,27 @@ public class CartServiceImpl implements CartService {
 //        Cart cart = getCart(login);
 //        cart.getCartItems().removeIf(cartItem -> cartItem.getId().equals(cartItemId));
 //        cartRepository.save(cart);
-        cartItemRepository.deleteById(UUID.fromString(cartItemId));
+        cartItemRepository.deleteById(cartItemId);
     }
 
     @Override
     public void clearCart(String login) {
         Cart cart = getCart(login);
-        cart.getCartItems().clear();
-        cartRepository.save(cart);
+//        cart.getCartItems().clear();
+//        cartRepository.save(cart);
+        cartItemRepository.deleteAllByCartId(cart.getId());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CartItem> getCartItems(String login) {
+        Cart cart = cartRepository.findByUserLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("No cart for user: " + login));
+        return cartItemRepository.findAllByCartId(cart.getId());
+    }
+
+    @Override
+    public Optional<CartItem> findCartItemById(String itemId) {
+        return cartItemRepository.findById(itemId);
     }
 }

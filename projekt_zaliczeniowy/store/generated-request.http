@@ -100,7 +100,7 @@ POST http://localhost:8080/api/cart/add?
 Authorization: Bearer {{auth_token}}
 
 ### Delete item from my cart
-DELETE http://localhost:8080/api/cart/delete/{{itemId}}
+DELETE http://localhost:8080/api/cart/delete/cd016f4d-c9b4-4e9f-9bfa-be8c77080c00
 Authorization: Bearer {{auth_token}}
 
 ### Clear my cart

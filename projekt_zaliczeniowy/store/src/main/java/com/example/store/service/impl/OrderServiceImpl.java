@@ -1,7 +1,10 @@
 package com.example.store.service.impl;
 
+import com.example.store.model.Book;
 import com.example.store.model.Order;
 import com.example.store.model.OrderStatus;
+import com.example.store.repository.BookRepository;
+import com.example.store.repository.CartItemRepository;
 import com.example.store.repository.OrderRepository;
 import com.example.store.service.OrderService;
 import com.stripe.Stripe;
@@ -22,6 +25,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final BookRepository bookRepository;
+    private final CartItemRepository cartItemRepository;
 
     @Value("${STRIPE_API_KEY}")
     private String apiKey;
@@ -102,33 +107,46 @@ public class OrderServiceImpl implements OrderService {
                     order.setPaidAt(LocalDateTime.now());
                     orderRepository.save(order);
 
-                    // -> +30sec SHIPPED -> +15sec DELIVERED
-                    String orderId = order.getId();
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(30000);
-                            orderRepository.findById(orderId).ifPresent(o -> {
-                                o.setStatus(OrderStatus.SHIPPED);
-                                orderRepository.save(o);
-                            });
+                    deactivateBooks(order);
 
-                            Thread.sleep(15000);
-                            orderRepository.findById(orderId).ifPresent(o -> {
-                                o.setStatus(OrderStatus.DELIVERED);
-                                orderRepository.save(o);
-                            });
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }).start();
+                    scheduleShippingAndDelivery(order.getId());
                 });
             }
         }
     }
 
+    private void deactivateBooks(Order order) {
+        order.getItems().forEach(item -> {
+            Book book = item.getBook();
+            book.setActive(false);
+            bookRepository.save(book);
+        });
+    }
+
+    private void scheduleShippingAndDelivery(String orderId) {
+        // -> +30sec SHIPPED -> +15sec DELIVERED
+        new Thread(() -> {
+            try {
+                Thread.sleep(30000);
+                orderRepository.findById(orderId).ifPresent(o -> {
+                    o.setStatus(OrderStatus.SHIPPED);
+                    orderRepository.save(o);
+                });
+
+                Thread.sleep(15000);
+                orderRepository.findById(orderId).ifPresent(o -> {
+                    o.setStatus(OrderStatus.DELIVERED);
+                    orderRepository.save(o);
+                });
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+
     private double calculatePrice(Order order) { // zmienić na Order (wszystkie itemki * 100 żeby w groszach)
         double total = order.getItems().stream()
-                .mapToDouble(item -> item.getPrice() *  item.getQuantity())
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
 
         return total * 100; // cena * 100 żeby było w groszach
