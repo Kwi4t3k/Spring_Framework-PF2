@@ -20,4 +20,6 @@ public interface UserService {
     List<User> findAll();
 
     void unban(String userId);
+
+    void deleteUser(String login);
 }

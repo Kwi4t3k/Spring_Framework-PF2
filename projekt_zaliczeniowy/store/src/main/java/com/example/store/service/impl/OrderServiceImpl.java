@@ -123,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
     public String placeOrder(String username) {
         // 1. Pobierz koszyk
         Cart cart = cartRepository.findByUserLogin(username)
-                .orElseThrow(() -> new IllegalArgumentException("Brak koszyka dla " + username));
+                .orElseThrow(() -> new IllegalArgumentException("No cart for " + username));
 
         // 2. Pobierz elementy koszyka już jako List<CartItem>
         List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
@@ -161,6 +161,14 @@ public class OrderServiceImpl implements OrderService {
         cartItemRepository.deleteAllByCartId(cart.getId());
 
         return order.getId();
+    }
+
+    @Override
+    public void changeStatus(String orderId, OrderStatus orderStatus) {
+        Order order = orderRepository.findById(orderId)
+                 .orElseThrow(() -> new IllegalArgumentException("No order with id " + orderId));
+        order.setStatus(orderStatus);
+        orderRepository.save(order);
     }
 
     private void deactivateBooks(Order order) {

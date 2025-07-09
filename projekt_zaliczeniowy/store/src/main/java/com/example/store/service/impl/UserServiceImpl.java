@@ -2,11 +2,10 @@ package com.example.store.service.impl;
 
 import com.example.store.dto.UserRequest;
 import com.example.store.model.Cart;
+import com.example.store.model.Order;
 import com.example.store.model.Role;
 import com.example.store.model.User;
-import com.example.store.repository.CartRepository;
-import com.example.store.repository.RoleRepository;
-import com.example.store.repository.UserRepository;
+import com.example.store.repository.*;
 import com.example.store.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +22,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CartItemRepository cartItemRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public User register(UserRequest req) {
@@ -105,5 +106,25 @@ public class UserServiceImpl implements UserService {
             user.get().getRoles().clear();
             userRepository.save(user.get());
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Usuń elementy koszyka
+        cartRepository.findByUserLogin(login).ifPresent(cart -> {
+            cartItemRepository.deleteAllByCartId(cart.getId());
+            cartRepository.delete(cart);
+        });
+
+        // Usuń zamówienia (razem z pozycjami przez cascade)
+        List<Order> orders = orderRepository.findAllByUserLogin(login);
+        orderRepository.deleteAll(orders);
+
+        // Usuń użytkownika
+        userRepository.delete(user);
     }
 }

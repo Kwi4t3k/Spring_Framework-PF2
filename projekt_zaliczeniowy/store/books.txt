@@ -1,0 +1,23 @@
+{
+  "id": "",
+  "title": "Pan Tadeusz",
+  "author": "Adam Mickiewicz",
+  "price": 100,
+  "isActive": true
+}
+
+{
+  "id": "",
+  "title": "Lalka",
+  "author": "Bolesław Prus",
+  "price": 90,
+  "isActive": true
+}
+
+{
+  "id": "",
+  "title": "Dziady",
+  "author": "Adam Mickiewicz",
+  "price": 85,
+  "isActive": true
+}

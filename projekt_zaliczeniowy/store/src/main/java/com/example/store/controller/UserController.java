@@ -92,4 +92,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    @DeleteMapping("/eraseUser/{login}")
+    public ResponseEntity<String> eraseUser(@PathVariable String login) {
+        try {
+            userService.deleteUser(login);
+            return ResponseEntity.ok("User " + login + " and all related data deleted.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user");
+        }
+    }
 }
