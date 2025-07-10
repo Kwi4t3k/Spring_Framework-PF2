@@ -66,4 +66,16 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @DeleteMapping("/erase/{bookId}")
+    public ResponseEntity<String> eraseBook(@PathVariable("bookId") String bookId) {
+        try {
+            bookService.eraseById(bookId);
+            return ResponseEntity.ok("Book with ID: " + bookId + " permanently deleted.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to erase book: " + e.getMessage());
+        }
+    }
 }

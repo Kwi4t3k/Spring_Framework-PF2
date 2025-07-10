@@ -5,7 +5,7 @@
 @annaId = bb3c530f-00a6-4a6d-b2e8-bc1fa8a1ac5d
 
 ### Erase user
-DELETE http://localhost:8080/api/users/eraseUser/anna
+DELETE http://localhost:8080/api/users/eraseUser/user
 Authorization: Bearer {{auth_token}}
 
 ### Register
@@ -13,8 +13,8 @@ POST http://localhost:8080/api/auth/register
 Content-Type: {{contentType}}
 
 {
-  "login": "anna",
-  "password": "anna"
+  "login": "user",
+  "password": "user"
 }
 
 ### Login
@@ -29,6 +29,11 @@ Content-Type: {{contentType}}
 #{
 #  "login": "anna",
 #  "password": "anna"
+#}
+
+#{
+#  "login": "user",
+#  "password": "user"
 #}
 
 > {%
@@ -86,12 +91,16 @@ Authorization: Bearer {{auth_token}}
   "id": "",
   "title": "Dziady",
   "author": "Adam Mickiewicz",
-  "price": 85,
+  "price": 99,
   "isActive": true
 }
 
 ### Delete book
-DELETE http://localhost:8080/api/books/7f89cdd1-9ad6-4149-af36-117c96ef3ae2
+DELETE http://localhost:8080/api/books/e0b72dfd-152d-4858-92fa-db5dd1e7870a
+Authorization: Bearer {{auth_token}}
+
+### Erase book
+DELETE http://localhost:8080/api/books/erase/f240c825-2fb5-429b-ab1c-b1181f446baa
 Authorization: Bearer {{auth_token}}
 
 ### Viev my cart
@@ -100,11 +109,11 @@ Authorization: Bearer {{auth_token}}
 
 ### Add item to my cart
 POST http://localhost:8080/api/cart/add?
-    bookId=7f89cdd1-9ad6-4149-af36-117c96ef3ae2
+    bookId=f240c825-2fb5-429b-ab1c-b1181f446baa
 Authorization: Bearer {{auth_token}}
 
 ### Delete item from my cart
-DELETE http://localhost:8080/api/cart/delete/8d9eb0ba-6ef3-4022-9e39-652b77d129be
+DELETE http://localhost:8080/api/cart/delete/d676ebf2-2831-4b18-a290-46fb2a3e0253
 Authorization: Bearer {{auth_token}}
 
 ### Clear my cart
@@ -116,7 +125,7 @@ POST http://localhost:8080/api/orders/placeOrder
 Authorization: Bearer {{auth_token}}
 
 ### Checkout
-POST http://localhost:8080/api/orders/checkout/b77cf03f-edbe-4700-a19e-c6c07cbd28c4
+POST http://localhost:8080/api/orders/checkout/915e9a5f-ec9a-4cf5-9006-d4274655ca33
 Authorization: Bearer {{auth_token}}
 
 ### Status change (PAID, SHIPPED, DELIVERED)
