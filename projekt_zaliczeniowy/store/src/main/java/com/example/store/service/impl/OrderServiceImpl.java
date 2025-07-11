@@ -121,14 +121,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public String placeOrder(String username) {
-        // 1. Pobierz koszyk
         Cart cart = cartRepository.findByUserLogin(username)
                 .orElseThrow(() -> new IllegalArgumentException("No cart for " + username));
 
-        // 2. Pobierz elementy koszyka już jako List<CartItem>
         List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
 
-        // 3. Utwórz Order
         Order order = Order.builder()
                 .id(UUID.randomUUID().toString())
                 .user(cart.getUser())
@@ -136,19 +133,17 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         order.setItems(new ArrayList<>());
 
-        // 4. Przenieś CartItem → OrderItem
         cartItems.forEach(ci -> {
             OrderItem orderItem = OrderItem.builder()
                     .id(UUID.randomUUID().toString())
                     .order(order)
                     .book(ci.getBook())
-                    .quantity(1) // albo ci.getQuantity() jeśli trzymasz quantity
+                    .quantity(1)
                     .price(ci.getBook().getPrice())
                     .build();
             order.getItems().add(orderItem);
         });
 
-        // 5. Oblicz sumę
         double total = order.getItems().stream()
                 .mapToDouble(i -> i.getPrice() * i.getQuantity())
                 .sum();
@@ -156,7 +151,6 @@ public class OrderServiceImpl implements OrderService {
 
         order.setCreatedAt(LocalDateTime.now());
 
-        // 6. Zapisz order i wyczyść koszyk
         orderRepository.save(order);
         cartItemRepository.deleteAllByCartId(cart.getId());
 
@@ -200,7 +194,7 @@ public class OrderServiceImpl implements OrderService {
         }).start();
     }
 
-    private double calculatePrice(Order order) { // zmienić na Order (wszystkie itemki * 100 żeby w groszach)
+    private double calculatePrice(Order order) {
         double total = order.getItems().stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();

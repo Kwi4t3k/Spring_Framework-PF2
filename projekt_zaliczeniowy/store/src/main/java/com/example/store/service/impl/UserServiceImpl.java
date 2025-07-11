@@ -114,17 +114,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLogin(login)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Usuń elementy koszyka
         cartRepository.findByUserLogin(login).ifPresent(cart -> {
             cartItemRepository.deleteAllByCartId(cart.getId());
             cartRepository.delete(cart);
         });
 
-        // Usuń zamówienia (razem z pozycjami przez cascade)
         List<Order> orders = orderRepository.findAllByUserLogin(login);
         orderRepository.deleteAll(orders);
 
-        // Usuń użytkownika
         userRepository.delete(user);
     }
 }

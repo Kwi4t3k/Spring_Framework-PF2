@@ -21,20 +21,15 @@ Content-Type: {{contentType}}
 POST http://localhost:8080/api/auth/login
 Content-Type: {{contentType}}
 
+#{
+#  "login": "admin",
+#  "password": "admin"
+#}
+
 {
-  "login": "admin",
-  "password": "admin"
+  "login": "anna",
+  "password": "anna"
 }
-
-#{
-#  "login": "anna",
-#  "password": "anna"
-#}
-
-#{
-#  "login": "user",
-#  "password": "user"
-#}
 
 > {%
     client.global.set("auth_token", response.body.token);
@@ -75,11 +70,11 @@ GET http://localhost:8080/api/books/allAvailableBooks
 Authorization: Bearer {{auth_token}}
 
 ### Check if concrete book is available
-GET http://localhost:8080/api/books/isBookAvailable/7f89cdd1-9ad6-4149-af36-117c96ef3ae2
+GET http://localhost:8080/api/books/isBookAvailable/4b02fe60-1b83-4905-80e1-40b811653622
 Authorization: Bearer {{auth_token}}
 
 ### List information about concrete book
-GET http://localhost:8080/api/books/findBookById/7f89cdd1-9ad6-4149-af36-117c96ef3ae2
+GET http://localhost:8080/api/books/findBookById/4b02fe60-1b83-4905-80e1-40b811653622
 Authorization: Bearer {{auth_token}}
 
 ### Add new book
@@ -89,18 +84,18 @@ Authorization: Bearer {{auth_token}}
 
 {
   "id": "",
-  "title": "Dziady",
-  "author": "Adam Mickiewicz",
-  "price": 99,
+  "title": "Quo Vadis",
+  "author": "Henryk Sienkiewicz",
+  "price": 120,
   "isActive": true
 }
 
-### Delete book
-DELETE http://localhost:8080/api/books/e0b72dfd-152d-4858-92fa-db5dd1e7870a
+### Delete book (soft delete)
+DELETE http://localhost:8080/api/books/e3087b1c-7621-4a6d-a4e3-b205e5c057cb
 Authorization: Bearer {{auth_token}}
 
 ### Erase book
-DELETE http://localhost:8080/api/books/erase/f240c825-2fb5-429b-ab1c-b1181f446baa
+DELETE http://localhost:8080/api/books/erase/3f956998-4f34-48cc-a038-dd8a79b7e2dd
 Authorization: Bearer {{auth_token}}
 
 ### Viev my cart
@@ -109,11 +104,11 @@ Authorization: Bearer {{auth_token}}
 
 ### Add item to my cart
 POST http://localhost:8080/api/cart/add?
-    bookId=f240c825-2fb5-429b-ab1c-b1181f446baa
+    bookId=e3087b1c-7621-4a6d-a4e3-b205e5c057cb
 Authorization: Bearer {{auth_token}}
 
 ### Delete item from my cart
-DELETE http://localhost:8080/api/cart/delete/d676ebf2-2831-4b18-a290-46fb2a3e0253
+DELETE http://localhost:8080/api/cart/delete/2a3ecec9-a966-4886-8613-f9ac9cc835bf
 Authorization: Bearer {{auth_token}}
 
 ### Clear my cart
@@ -125,10 +120,10 @@ POST http://localhost:8080/api/orders/placeOrder
 Authorization: Bearer {{auth_token}}
 
 ### Checkout
-POST http://localhost:8080/api/orders/checkout/915e9a5f-ec9a-4cf5-9006-d4274655ca33
+POST http://localhost:8080/api/orders/checkout/6192939f-544c-4b4a-bcf5-4b670f55ac47
 Authorization: Bearer {{auth_token}}
 
 ### Status change (PAID, SHIPPED, DELIVERED)
-POST http://localhost:8080/api/orders/changeStatus/b77cf03f-edbe-4700-a19e-c6c07cbd28c4?
+POST http://localhost:8080/api/orders/changeStatus/c50b2ac9-94e7-4c9a-9be3-964a8ee3623d?
     orderStatus=DELIVERED
 Authorization: Bearer {{auth_token}}

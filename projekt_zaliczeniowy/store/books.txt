@@ -21,3 +21,11 @@
   "price": 85,
   "isActive": true
 }
+
+{
+  "id": "",
+  "title": "Quo Vadis",
+  "author": "Henryk Sienkiewicz",
+  "price": 120,
+  "isActive": true
+}
